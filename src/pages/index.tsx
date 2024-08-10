@@ -141,6 +141,7 @@ const IndexPage: React.FC<PageProps> = () => {
     <main style={pageStyles}>
       <h1 style={headingStyles}>
         Congratulations
+        <span className="text-3xl font-bold underline">Hello world!</span>
         <br />
         <span style={headingAccentStyles}>
           — you just made a Gatsby site! 🎉🎉🎉
