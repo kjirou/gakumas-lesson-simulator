@@ -1,5 +1,12 @@
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxOption,
+  ComboboxOptions,
+} from "@headlessui/react";
 import * as React from "react";
 import type { HeadFC, PageProps } from "gatsby";
+import { useState } from "react";
 
 const pageStyles = {
   color: "#232129",
@@ -135,6 +142,54 @@ const links = [
     color: "#663399",
   },
 ];
+const people = [
+  { id: 1, name: "Durward Reynolds" },
+  { id: 2, name: "Kenton Towne" },
+  { id: 3, name: "Therese Wunsch" },
+  { id: 4, name: "Benedict Kessler" },
+  { id: 5, name: "Katelyn Rohan" },
+];
+
+function Example() {
+  const [selectedPerson, setSelectedPerson] = useState(people[0]);
+  const [query, setQuery] = useState("");
+
+  const filteredPeople =
+    query === ""
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase());
+        });
+
+  return (
+    <Combobox
+      value={selectedPerson}
+      onChange={(value) => {
+        if (value) {
+          setSelectedPerson(value);
+        }
+      }}
+      onClose={() => setQuery("")}
+    >
+      <ComboboxInput
+        aria-label="Assignee"
+        displayValue={(person: any) => person?.name}
+        onChange={(event) => setQuery(event.target.value)}
+      />
+      <ComboboxOptions anchor="bottom" className="border empty:invisible">
+        {filteredPeople.map((person) => (
+          <ComboboxOption
+            key={person.id}
+            value={person}
+            className="data-[focus]:bg-blue-100"
+          >
+            {person.name}
+          </ComboboxOption>
+        ))}
+      </ComboboxOptions>
+    </Combobox>
+  );
+}
 
 const IndexPage: React.FC<PageProps> = () => {
   return (
@@ -147,6 +202,9 @@ const IndexPage: React.FC<PageProps> = () => {
           — you just made a Gatsby site! 🎉🎉🎉
         </span>
       </h1>
+      <div>
+        <Example />
+      </div>
       <p style={paragraphStyles}>
         Edit <code style={codeStyles}>src/pages/index.tsx</code> to see this
         page update in real-time. 😎
