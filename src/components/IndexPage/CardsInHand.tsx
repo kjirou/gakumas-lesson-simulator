@@ -67,19 +67,33 @@ const CardInHand: React.FC<CardInHandProps> = (props) => {
   );
 };
 
-const calculateLeft = (
+/**
+ * 手札のカードの左端の座標を計算する
+ *
+ * - コンテナに収まる限りは、カードとその間隔を考慮して中央へ配置する
+ * - コンテナに収まらない場合は、最初と最後のカードがコンテナの端に配置される前提で、その間を均等に配置する
+ *
+ * @param containerWidth 手札のコンテナの幅
+ * @param cardWidth カードの幅
+ * @param gap カード間の隙間
+ * @param numberOfCards 手札のカードの枚数
+ * @param cardIndex 計算対象の手札のカードのインデックス
+ */
+export const calculateCardInHandLeft = (
   containerWidth: number,
   cardWidth: number,
-  cardGap: number,
-  cardCount: number,
-  index: number,
+  gap: number,
+  numberOfCards: number,
+  cardIndex: number,
 ) => {
-  const cardsFullWidth = cardWidth * cardCount + cardGap * (cardCount - 1);
+  const cardsFullWidth = cardWidth * numberOfCards + gap * (numberOfCards - 1);
   const cardsActualWidth = Math.min(containerWidth, cardsFullWidth);
   const startLeft = (containerWidth - cardsActualWidth) / 2;
   const marginPerCard =
-    cardCount !== 1 ? (cardsActualWidth - cardWidth) / (cardCount - 1) : 0;
-  return startLeft + marginPerCard * index;
+    numberOfCards !== 1
+      ? (cardsActualWidth - cardWidth) / (numberOfCards - 1)
+      : 0;
+  return startLeft + marginPerCard * cardIndex;
 };
 
 export const CardsInHand: React.FC<{
@@ -93,7 +107,13 @@ export const CardsInHand: React.FC<{
         props.selectedCardIndex === index
           ? { top: 0, zIndex: 9 }
           : { top: 10, zIndex: index };
-      const left = calculateLeft(360, 100, 20, props.hand.length, index);
+      const left = calculateCardInHandLeft(
+        360,
+        100,
+        20,
+        props.hand.length,
+        index,
+      );
       return {
         card,
         left,
