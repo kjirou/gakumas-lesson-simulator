@@ -1,9 +1,9 @@
 import { type CardPlayPreviewDisplay, type LessonDisplay } from "gakumas-core";
 import React from "react";
-import { CardInHands } from "./CardInHands";
+import { CardsInHand } from "./CardsInHand";
 import { CardPlayPreview } from "./CardPlayPreview";
 
-type CardInHandsProps = React.ComponentProps<typeof CardInHands>;
+type CardInHandsProps = React.ComponentProps<typeof CardsInHand>;
 
 type CardPlayPreviewProps = React.ComponentProps<typeof CardPlayPreview>;
 
@@ -81,7 +81,7 @@ export const IndexPageView: React.FC<Props> = (props) => {
             ))}
           </ul>
         </div>
-        <CardInHands
+        <CardsInHand
           hand={props.hand}
           onClick={props.onClickCardInHand}
           selectedCardIndex={props.selectedCardIndex}

@@ -82,7 +82,7 @@ const calculateLeft = (
   return startLeft + marginPerCard * index;
 };
 
-export const CardInHands: React.FC<{
+export const CardsInHand: React.FC<{
   hand: LessonDisplay["hand"];
   onClick: (cardIndex: number) => void;
   selectedCardIndex: number | undefined;
