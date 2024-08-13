@@ -19,12 +19,17 @@ const CardInHand: React.FC<CardInHandProps> = (props) => {
     }),
     [props.left, props.top, props.zIndex],
   );
-  const onClick = useCallback(() => {
-    props.onClick();
-  }, [props.onClick]);
+  const onClick = useCallback(
+    (event: React.MouseEvent<HTMLInputElement>) => {
+      event.stopPropagation();
+      props.onClick();
+    },
+    [props.onClick],
+  );
+  const backgroundColor = props.card.playable ? "bg-white" : "bg-slate-200";
   return (
     <div
-      className="w-[100px] h-[150px] absolute border bg-white cursor-pointer"
+      className={`w-[100px] h-[150px] absolute border ${backgroundColor} select-none cursor-pointer`}
       onClick={onClick}
       style={style}
     >
@@ -50,12 +55,12 @@ const CardInHand: React.FC<CardInHandProps> = (props) => {
         )}
         {props.card.effects.length > 0 && (
           <li className="text-xs">
-            {props.card.effects.map((effect) => {
-              const className = effect.applyable
+            {props.card.effects.map((effect, index) => {
+              const className = effect.activatable
                 ? "text-emerald-500"
                 : "text-red-500";
               return (
-                <span className={className}>
+                <span key={index} className={className}>
                   ({cardEffectDisplayKindToText(effect.kind)})
                 </span>
               );
@@ -96,7 +101,7 @@ export const calculateCardInHandLeft = (
   return startLeft + marginPerCard * cardIndex;
 };
 
-export const CardsInHand: React.FC<{
+export const CardListInHand: React.FC<{
   hand: LessonDisplay["hand"];
   onClick: (cardIndex: number) => void;
   selectedCardIndex: number | undefined;

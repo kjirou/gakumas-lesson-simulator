@@ -1,92 +1,89 @@
-import { type CardPlayPreviewDisplay, type LessonDisplay } from "gakumas-core";
+import { LessonDisplay } from "gakumas-core";
 import React from "react";
-import { CardsInHand } from "./CardsInHand";
+import { ActionEndOrNotPreview } from "./ActionEndOrNotPreview";
+import { CardListInHand } from "./CardListInHand";
 import { CardPlayPreview } from "./CardPlayPreview";
+import { IdolInformation } from "./IdolInformation";
+import { ModifierList } from "./ModifierList";
+import { ProducerItemList } from "./ProducerItemList";
+import { ScoreInformation } from "./ScoreInformation";
+import { SkipButton } from "./SkipButton";
+import { TurnInformation } from "./TurnInformation";
 
-type CardInHandsProps = React.ComponentProps<typeof CardsInHand>;
-
+type ActionEndOrNotPreviewProps = React.ComponentProps<
+  typeof ActionEndOrNotPreview
+>;
+type CardInHandsProps = React.ComponentProps<typeof CardListInHand>;
 type CardPlayPreviewProps = React.ComponentProps<typeof CardPlayPreview>;
+type IdolInformationProps = React.ComponentProps<typeof IdolInformation>;
+type ScoreInformationProps = React.ComponentProps<typeof ScoreInformation>;
+type SkipButtonProps = React.ComponentProps<typeof SkipButton>;
+type TurnInformationProps = React.ComponentProps<typeof TurnInformation>;
 
-const PageContent: React.FC<{ children: React.ReactNode }> = (props) => {
+const PageContent: React.FC<{
+  children: React.ReactNode;
+  onClick?: () => void;
+}> = ({ children, onClick }) => {
   return (
-    <div className="w-[360px] h-[720px] relative bg-slate-50">
-      {props.children}
+    <div className="w-[360px] h-[720px] relative bg-slate-50" onClick={onClick}>
+      {children}
     </div>
   );
 };
 
 type Props = {
+  actionEndOrNotPreview?: ActionEndOrNotPreviewProps;
   cardPlayPreview?: CardPlayPreviewProps;
   hand: LessonDisplay["hand"];
-  life: LessonDisplay["life"];
-  maxLife: number;
+  idolInformation: IdolInformationProps;
   modifiers: LessonDisplay["modifiers"];
   onClickCardInHand: CardInHandsProps["onClick"];
+  onClickLessonPageContent: () => void;
   producerItems: LessonDisplay["producerItems"];
-  remainingTurns: LessonDisplay["remainingTurns"];
-  remainingTurnsChange: LessonDisplay["remainingTurnsChange"];
-  score: LessonDisplay["score"];
+  scoreInformation: ScoreInformationProps;
   selectedCardIndex?: number;
-  vitality: LessonDisplay["vitality"];
+  skipButton: SkipButtonProps;
+  turnInformation: TurnInformationProps;
 };
 
 export const IndexPageView: React.FC<Props> = (props) => {
   return (
     <main className="flex gap-2">
-      <PageContent>
+      <PageContent onClick={props.onClickLessonPageContent}>
         <div className="h-[40px]"></div>
         <div className="h-[160px] flex justify-center items-center bg-slate-100">
-          <ul className="flex-1">
-            <li>
-              残りターン数:
-              <br />
-              {props.remainingTurns}
-              {props.remainingTurnsChange !== 0 &&
-                `(${props.remainingTurnsChange})`}
-            </li>
-          </ul>
-          <div className="flex-1 flex justify-center">
-            <div className="text-3xl font-bold">{props.score}</div>
+          <div className="flex-1">
+            <TurnInformation {...props.turnInformation} />
           </div>
-          <ul className="flex-1">
-            <li>
-              体力: {props.life}/{props.maxLife}
-            </li>
-            <li>元気: {props.vitality}</li>
-          </ul>
+          <div className="flex-1 h-full">
+            <ScoreInformation {...props.scoreInformation} />
+          </div>
+          <div className="flex-1">
+            <IdolInformation {...props.idolInformation} />
+          </div>
         </div>
         <div className="h-[280px] flex">
-          <ul className="flex-1 w-6/12">
-            {props.modifiers.map((modifier) => (
-              <li key={modifier.id}>
-                {[
-                  modifier.name,
-                  ...(modifier.representativeValueText !== undefined
-                    ? [modifier.representativeValueText]
-                    : []),
-                ].join(" ")}
-              </li>
-            ))}
-          </ul>
-          <ul className="flex-1 w-6/12">
-            {props.producerItems.map((producerItem) => (
-              <li key={producerItem.id}>
-                {[
-                  producerItem.name,
-                  producerItem.remainingTimes !== undefined
-                    ? producerItem.remainingTimes + "回"
-                    : "-",
-                ].join(" ")}
-              </li>
-            ))}
-          </ul>
+          <div className="flex-1 w-6/12">
+            <ModifierList modifiers={props.modifiers} />
+          </div>
+          <div className="flex-1 w-6/12">
+            <ProducerItemList producerItems={props.producerItems} />
+          </div>
         </div>
-        <CardsInHand
+        <CardListInHand
           hand={props.hand}
           onClick={props.onClickCardInHand}
           selectedCardIndex={props.selectedCardIndex}
         />
         <div className="h-[80px]"></div>
+        {props.actionEndOrNotPreview && (
+          <div className="absolute top-[412px] left-[4px] z-5">
+            <ActionEndOrNotPreview {...props.actionEndOrNotPreview} />
+          </div>
+        )}
+        <div className="absolute top-[412px] right-[52px] z-5">
+          <SkipButton {...props.skipButton} />
+        </div>
         {props.cardPlayPreview && (
           <CardPlayPreview {...props.cardPlayPreview} />
         )}
