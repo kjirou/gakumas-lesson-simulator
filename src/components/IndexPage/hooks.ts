@@ -48,6 +48,8 @@ export const useIndexPage = (): Props => {
     });
     return gamePlay;
   });
+  // 状態遷移をアニメーションで表現したい場合は、画面表示用のこの状態も gamePlay とは別に保持する必要がある
+  // ゲームの内部処理上は即座に終わって gamePlay に反映するので、 gamePlay やそれから生成する lesson に紐づく表示はその瞬間に変わってしまうため
   const [lessonDisplay, setLessonDisplay] = useState<LessonDisplay>(() => {
     return generateLessonDisplay(gamePlay);
   });
@@ -123,19 +125,18 @@ export const useIndexPage = (): Props => {
   }
   const onClickCardInHand = useCallback(
     (selectedCardIndex_: number) => {
-      if (!isActionEnabled) {
-        return;
-      }
-      if (selectedCardIndex_ === selectedCardIndex) {
-        const cardInHandDisplay = lessonDisplay.hand[selectedCardIndex_];
-        if (cardInHandDisplay.playable) {
-          const newGamePlay = playCard(gamePlay, selectedCardIndex_);
-          setSelectedCardIndex(undefined);
-          setGamePlay(newGamePlay);
-          setLessonDisplay(generateLessonDisplay(newGamePlay));
+      if (isActionEnabled) {
+        if (selectedCardIndex_ === selectedCardIndex) {
+          const cardInHandDisplay = lessonDisplay.hand[selectedCardIndex_];
+          if (cardInHandDisplay.playable) {
+            const newGamePlay = playCard(gamePlay, selectedCardIndex_);
+            setSelectedCardIndex(undefined);
+            setGamePlay(newGamePlay);
+            setLessonDisplay(generateLessonDisplay(newGamePlay));
+          }
+        } else {
+          setSelectedCardIndex(selectedCardIndex_);
         }
-      } else {
-        setSelectedCardIndex(selectedCardIndex_);
       }
     },
     [selectedCardIndex, isActionEnabled],
