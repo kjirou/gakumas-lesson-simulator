@@ -1,4 +1,4 @@
-import { calculateCardInHandLeft } from "./CardsInHand";
+import { calculateCardInHandLeft } from "./CardListInHand";
 
 describe("calculateCardInHandLeft", () => {
   const testCases: Array<{

@@ -1,4 +1,40 @@
-import { type ActionCost, type CardEffectDisplay } from "gakumas-core";
+/**
+ * 大体ここにあるものは、gakumas-core 側で実装しないとダメなやつ
+ */
+
+import {
+  ActionCost,
+  CardEffectDisplay,
+  CharacterData,
+  CharacterDataId,
+  GamePlay,
+  Idol,
+  IdolData,
+  IdolParameterKind,
+  Lesson,
+  ModifierDisplay,
+  getCharacterDataById,
+  getIdolParameterKindOnTurn,
+  getLesson,
+  hasActionEnded,
+  isLessonEnded,
+} from "gakumas-core";
+
+export const idolParameterKindToTextColorClassName = (
+  kind: IdolParameterKind,
+): string => {
+  switch (kind) {
+    case "dance":
+      return "text-blue-500";
+    case "visual":
+      return "text-yellow-500";
+    case "vocal":
+      return "text-red-500";
+    default:
+      const unreachable: never = kind;
+      throw new Error("Unreachable statement");
+  }
+};
 
 export const actionCostKindToText = (kind: ActionCost["kind"]): string => {
   switch (kind) {
@@ -82,4 +118,11 @@ export const cardEffectDisplayKindToText = (
     default:
       return "その他";
   }
+};
+
+export const createCharacterFullName = (
+  characterDataId: CharacterData["id"],
+): string => {
+  const characterData = getCharacterDataById(characterDataId);
+  return `${characterData.lastName} ${characterData.firstName}`;
 };

@@ -10,7 +10,7 @@ type Props = {
 export const CardPlayPreview: React.FC<Props> = ({ onClick, preview }) => {
   return (
     <div
-      className="w-[280px] h-[160px] absolute top-[300px] left-[40px] z-10 border bg-white cursor-pointer"
+      className="w-[260px] h-[160px] absolute top-[300px] left-[50px] z-10 border bg-white cursor-pointer"
       onClick={onClick}
     >
       <ul>
