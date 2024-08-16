@@ -10,6 +10,7 @@ import {
   GamePlay,
   Idol,
   IdolData,
+  IdolDataId,
   IdolParameterKind,
   Lesson,
   ModifierDisplay,
@@ -17,8 +18,15 @@ import {
   getIdolParameterKindOnTurn,
   getLesson,
   hasActionEnded,
+  idols,
+  initializeGamePlay,
   isLessonEnded,
 } from "gakumas-core";
+
+export const createJsonDataUri = (jsonObject: Object): string => {
+  const blob = new Blob([JSON.stringify(jsonObject)], { type: "text/json" });
+  return window.URL.createObjectURL(blob);
+};
 
 export const idolParameterKindToTextColorClassName = (
   kind: IdolParameterKind,
@@ -34,6 +42,10 @@ export const idolParameterKindToTextColorClassName = (
       const unreachable: never = kind;
       throw new Error("Unreachable statement");
   }
+};
+
+const rarityToText = (kind: "c" | "r" | "sr" | "ssr"): string => {
+  return kind.toUpperCase();
 };
 
 export const actionCostKindToText = (kind: ActionCost["kind"]): string => {
@@ -125,4 +137,88 @@ export const createCharacterFullName = (
 ): string => {
   const characterData = getCharacterDataById(characterDataId);
   return `${characterData.lastName} ${characterData.firstName}`;
+};
+
+export type InitializeGamePlayParams = Parameters<typeof initializeGamePlay>[0];
+
+export type SelectableIdol = {
+  fullName: string;
+  idolId: IdolData["id"];
+  rarity: string;
+  title: IdolData["title"];
+};
+
+export const selectableIdols: SelectableIdol[] = idols.map((idol) => {
+  return {
+    fullName: createCharacterFullName(idol.characterId),
+    idolId: idol.id,
+    rarity: rarityToText(idol.rarity),
+    title: idol.title,
+  };
+});
+
+export const specialTrainingLevelSelectOptions = [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+] as const;
+
+export const talentAwakeningLevelSelectOptions = [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+] as const;
+
+/**
+ * 主に設定値の保存のために、ローカルストレージやファイルへ保存するJSON形式のデータ
+ *
+ * - 基本的には、入力値群を表現したものなので、個々の値は string か boolean になる
+ */
+export type SavedData = {
+  clearScoreThresholds: {
+    clear: string;
+    perfect: string;
+  };
+  idolDataId: IdolDataId;
+  life: string;
+  maxLife: string;
+  scoreBonus: {
+    isEnabled: boolean;
+    values: Record<IdolParameterKind, string>;
+  };
+  specialTrainingLevel: (typeof specialTrainingLevelSelectOptions)[number];
+  talentAwakeningLevel: (typeof talentAwakeningLevelSelectOptions)[number];
+};
+
+export const defaultSavedData: SavedData = {
+  clearScoreThresholds: {
+    clear: "",
+    perfect: "",
+  },
+  idolDataId: "hanamisaki-ssr-1",
+  life: "",
+  maxLife: "",
+  scoreBonus: {
+    isEnabled: false,
+    values: {
+      vocal: "100",
+      dance: "100",
+      visual: "100",
+    },
+  },
+  specialTrainingLevel: "3",
+  talentAwakeningLevel: "2",
+};
+
+export type SavedDataManager = {
+  clearSavedData: () => void;
+  isLoading: boolean;
+  savedData: SavedData;
+  setImportedJson: (state: string) => void;
 };

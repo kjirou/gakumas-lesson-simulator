@@ -1,7 +1,8 @@
 import React from "react";
 import type { HeadFC, PageProps } from "gatsby";
 import { IndexPageView } from "./View";
-import { useIndexPage } from "./hooks";
+import { usePageView, useSavedDataManager } from "./hooks";
+import { SavedDataManager } from "./utils";
 
 const siteUrl = "https://gakumas-lesson-simulator.netlify.app/";
 const siteTitle = "学マスレッスンシミュレーター";
@@ -9,9 +10,20 @@ const siteSummary =
   "学園アイドルマスター（学マス）のレッスンを自由に設定して、シミュレーションできるツールです。";
 const ogImageUrl = `${siteUrl}og-image.png`;
 
+const IndexPageOnSavedData: React.FC<{
+  savedDataManager: SavedDataManager;
+}> = (props) => {
+  const pageViewProps = usePageView(props.savedDataManager);
+  return <IndexPageView {...pageViewProps} />;
+};
+
 export const IndexPage: React.FC<PageProps> = () => {
-  const props = useIndexPage();
-  return <IndexPageView {...props} />;
+  const savedDataManager = useSavedDataManager();
+  return savedDataManager.isLoading ? (
+    <div>Loading...</div>
+  ) : (
+    <IndexPageOnSavedData savedDataManager={savedDataManager} />
+  );
 };
 
 export const IndexPageHead: HeadFC = () => (
