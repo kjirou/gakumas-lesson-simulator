@@ -70,6 +70,7 @@ const LessonPageContentRaw: React.FC<Props> = (props) => {
         setLessonDisplay(generateLessonDisplay(newGamePlay));
         break;
       }
+      case "lessonStart":
       case "turnStart": {
         const newGamePlay = startTurn(gamePlay);
         setGamePlay(newGamePlay);
@@ -92,9 +93,9 @@ const LessonPageContentRaw: React.FC<Props> = (props) => {
     scoreBonus: lessonDisplay.scoreBonus,
   };
   let idolInformation: IdolInformationProps = {
-    fullName: createCharacterFullName(lesson.idol.original.data.characterId),
+    fullName: createCharacterFullName(lesson.idol.data.characterId),
     life: lessonDisplay.life,
-    maxLife: lesson.idol.original.maxLife,
+    maxLife: lesson.idol.maxLife,
     vitality: lessonDisplay.vitality,
   };
   let modifierList: ModifierListProps = { modifiers: lessonDisplay.modifiers };
