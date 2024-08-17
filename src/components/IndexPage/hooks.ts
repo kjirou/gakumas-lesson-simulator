@@ -1,4 +1,4 @@
-import { IdolDataId } from "gakumas-core";
+import { IdolDataId, getCardSetDataById } from "gakumas-core";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IndexPageView } from "./View";
 import {
@@ -167,9 +167,12 @@ const useGamePlaySettings = (
       //   { id: "watashigasuta", enhanced: true },
       //   { id: "watashigasuta" },
       //   { id: "kokumintekiaidoru" },
-      //   ...getCardSetDataById("defaultLogicMotivation").cardDataIds.map((cardDataId: any) => ({
-      //     id: cardDataId,
-      //   })),
+      //   ...getCardSetDataById("defaultLogicMotivation").cardDataIds.map(
+      //     (cardDataId: any) => ({
+      //       id: cardDataId,
+      //     }),
+      //   ),
+      // ],
       clearScoreThresholds,
       idolDataId: inputValues.idolDataIdInputValue,
       life:

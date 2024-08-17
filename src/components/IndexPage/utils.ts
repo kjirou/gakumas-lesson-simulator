@@ -23,11 +23,6 @@ import {
   isLessonEnded,
 } from "gakumas-core";
 
-export const createJsonDataUri = (jsonObject: Object): string => {
-  const blob = new Blob([JSON.stringify(jsonObject)], { type: "text/json" });
-  return window.URL.createObjectURL(blob);
-};
-
 export const idolParameterKindToTextColorClassName = (
   kind: IdolParameterKind,
 ): string => {
