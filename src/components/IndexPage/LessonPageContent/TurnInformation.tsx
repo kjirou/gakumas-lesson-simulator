@@ -1,6 +1,6 @@
 import { LessonDisplay } from "gakumas-core";
 import React from "react";
-import { idolParameterKindToTextColorClassName } from "./utils";
+import { idolParameterKindToTextColorClassName } from "../utils";
 
 type Props = LessonDisplay["currentTurn"];
 

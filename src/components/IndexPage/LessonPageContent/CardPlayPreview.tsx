@@ -1,6 +1,6 @@
 import { type CardPlayPreviewDisplay } from "gakumas-core";
 import React from "react";
-import { actionCostKindToText } from "./utils";
+import { actionCostKindToText } from "../utils";
 
 type Props = {
   onClick: () => void;
