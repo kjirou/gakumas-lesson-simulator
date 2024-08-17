@@ -1,35 +1,10 @@
-import {
-  CardPlayPreviewDisplay,
-  GamePlay,
-  IdolDataId,
-  IdolParameterKind,
-  LessonDisplay,
-  ModifierDisplay,
-  endTurn,
-  generateCardPlayPreviewDisplay,
-  generateLessonDisplay,
-  getCardSetDataById,
-  getIdolParameterKindOnTurn,
-  getLesson,
-  getNextPhase,
-  initializeGamePlay,
-  playCard,
-  skipTurn,
-  startTurn,
-} from "gakumas-core";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { IdolDataId } from "gakumas-core";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IndexPageView } from "./View";
 import {
   InitializeGamePlayParams,
   SavedData,
   SavedDataManager,
-  createCharacterFullName,
   defaultSavedData,
   specialTrainingLevelSelectOptions,
   talentAwakeningLevelSelectOptions,
@@ -351,176 +326,52 @@ export const usePageView = (savedDataManager: SavedDataManager): Props => {
     talentAwakeningLevelInputValue,
   } = settingInputValues;
   useLocalStorageSynchronization(newSavedData);
-  const [gamePlay, setGamePlay] = useState<GamePlay>(() =>
-    initializeGamePlay(gamePlaySettings),
-  );
-  // 状態遷移をアニメーションで表現したい場合は、画面表示用のこの状態も gamePlay とは別に保持する必要がある
-  // ゲームの内部処理上は即座に終わって gamePlay に反映するので、 gamePlay やそれから生成する lesson に紐づく表示はその瞬間に変わってしまうため
-  const [lessonDisplay, setLessonDisplay] = useState<LessonDisplay>(() =>
-    generateLessonDisplay(gamePlay),
-  );
-  const [selectedCardIndex, setSelectedCardIndex] =
-    useState<Props["selectedCardIndex"]>();
-  const nextPhase = getNextPhase(gamePlay);
-  const lesson = getLesson(gamePlay);
-  useEffect(() => {
-    switch (nextPhase) {
-      case "playerInput": {
-        break;
-      }
-      case "lessonEnd": {
-        break;
-      }
-      case "turnEnd": {
-        const newGamePlay = endTurn(gamePlay);
-        setGamePlay(newGamePlay);
-        setLessonDisplay(generateLessonDisplay(newGamePlay));
-        break;
-      }
-      case "turnStart": {
-        const newGamePlay = startTurn(gamePlay);
-        setGamePlay(newGamePlay);
-        setLessonDisplay(generateLessonDisplay(newGamePlay));
-        break;
-      }
-      default:
-        const unreachable: never = nextPhase;
-        throw new Error("Unreachable statement");
-    }
-  }, [lesson.turnNumber, nextPhase]);
-  const isActionEnabled = nextPhase === "playerInput";
-  let scoreInformation: Props["scoreInformation"] = {
-    score: lessonDisplay.score,
-    idolParameterKind: getIdolParameterKindOnTurn(lesson),
-    scoreBonus: lessonDisplay.scoreBonus,
-  };
-  let idolInformation: Props["idolInformation"] = {
-    fullName: createCharacterFullName(lesson.idol.original.data.characterId),
-    life: lessonDisplay.life,
-    maxLife: lesson.idol.original.maxLife,
-    vitality: lessonDisplay.vitality,
-  };
-  let modifiers: Props["modifiers"] = lessonDisplay.modifiers;
-  let cardPlayPreview: Props["cardPlayPreview"] = undefined;
-  let actionEndOrNotPreview: Props["actionEndOrNotPreview"] = undefined;
-  if (selectedCardIndex !== undefined) {
-    const cardPlayPreviewDisplay = generateCardPlayPreviewDisplay(
-      gamePlay,
-      selectedCardIndex,
-    );
-    scoreInformation = {
-      ...scoreInformation,
-      score: cardPlayPreviewDisplay.lessonDelta.score.after,
-      scoreDelta: cardPlayPreviewDisplay.lessonDelta.score.delta,
-    };
-    idolInformation = {
-      ...idolInformation,
-      life: cardPlayPreviewDisplay.lessonDelta.life.after,
-      lifeDelta: cardPlayPreviewDisplay.lessonDelta.life.delta,
-      vitality: cardPlayPreviewDisplay.lessonDelta.vitality.after,
-      vitalityDelta: cardPlayPreviewDisplay.lessonDelta.vitality.delta,
-    };
-    modifiers = cardPlayPreviewDisplay.lessonDelta.modifires;
-    cardPlayPreview = {
-      onClick: () => {},
-      preview: cardPlayPreviewDisplay,
-    };
-    actionEndOrNotPreview = {
-      willEnd: cardPlayPreviewDisplay.hasActionEnded,
-    };
-  }
-  const onClickRestartLessonButton = useCallback(() => {
-    setSelectedCardIndex(undefined);
-    const newGamePlay = initializeGamePlay(gamePlaySettings);
-    setGamePlay(newGamePlay);
-    setLessonDisplay(generateLessonDisplay(newGamePlay));
-  }, [gamePlaySettings]);
-  const onClickCardInHand = useCallback(
-    (selectedCardIndex_: number) => {
-      if (isActionEnabled) {
-        if (selectedCardIndex_ === selectedCardIndex) {
-          const cardInHandDisplay = lessonDisplay.hand[selectedCardIndex_];
-          if (cardInHandDisplay.playable) {
-            const newGamePlay = playCard(gamePlay, selectedCardIndex_);
-            setSelectedCardIndex(undefined);
-            setGamePlay(newGamePlay);
-            setLessonDisplay(generateLessonDisplay(newGamePlay));
-          }
-        } else {
-          setSelectedCardIndex(selectedCardIndex_);
-        }
-      }
-    },
-    [selectedCardIndex, isActionEnabled],
-  );
-  const onClickLessonPageContent = useCallback(() => {
-    setSelectedCardIndex(undefined);
-  }, []);
-  const onClickSkipButton = useCallback(() => {
-    if (isActionEnabled) {
-      const newGamePlay = skipTurn(gamePlay);
-      setSelectedCardIndex(undefined);
-      setGamePlay(newGamePlay);
-      setLessonDisplay(generateLessonDisplay(newGamePlay));
-    }
-  }, [gamePlay]);
   return {
-    actionEndOrNotPreview,
-    cardPlayPreview,
-    clearScoreThresholdsInputSet: {
-      clearScoreInputValue,
-      perfectScoreInputValue,
-      setClearScoreInputValue,
-      setPerfectScoreInputValue,
+    lessonPageContent: {
+      gamePlaySettings,
     },
-    exportDataLink: {
-      data: newSavedData,
+    settingsPageContent: {
+      clearScoreThresholdsInputSet: {
+        clearScoreInputValue,
+        perfectScoreInputValue,
+        setClearScoreInputValue,
+        setPerfectScoreInputValue,
+      },
+      exportDataLink: {
+        data: newSavedData,
+      },
+      idolSelect: {
+        idolDataIdInputValue,
+        setIdolDataIdInputValue,
+      },
+      importDataButton: {
+        setImportedJson: savedDataManager.setImportedJson,
+      },
+      lifeInput: {
+        lifeInputValue,
+        setLifeInputValue,
+      },
+      maxLifeInput: {
+        maxLifeInputValue,
+        setMaxLifeInputValue,
+      },
+      resetSettingsButtonProps: {
+        clearSavedData: savedDataManager.clearSavedData,
+      },
+      scoreBonusInputSet: {
+        isScoreBonusEnabledInputValue,
+        scoreBonusInputValueSet,
+        setIsScoreBonusEnabledInputValue,
+        setScoreBonusInputValueSet,
+      },
+      specialTrainingLevelSelect: {
+        setSpecialTrainingLevelInputValue,
+        specialTrainingLevelInputValue,
+      },
+      talentAwakeningLevelSelect: {
+        talentAwakeningLevelInputValue,
+        setTalentAwakeningLevelInputValue,
+      },
     },
-    hand: lessonDisplay.hand,
-    idolSelect: {
-      idolDataIdInputValue,
-      setIdolDataIdInputValue,
-    },
-    idolInformation,
-    importDataButton: {
-      setImportedJson: savedDataManager.setImportedJson,
-    },
-    lifeInput: {
-      lifeInputValue,
-      setLifeInputValue,
-    },
-    maxLifeInput: {
-      maxLifeInputValue,
-      setMaxLifeInputValue,
-    },
-    modifiers,
-    onClickCardInHand,
-    onClickLessonPageContent,
-    onClickRestartLessonButton,
-    producerItems: lessonDisplay.producerItems,
-    resetSettingsButtonProps: {
-      clearSavedData: savedDataManager.clearSavedData,
-    },
-    scoreBonusInputSet: {
-      isScoreBonusEnabledInputValue,
-      scoreBonusInputValueSet,
-      setIsScoreBonusEnabledInputValue,
-      setScoreBonusInputValueSet,
-    },
-    scoreInformation,
-    selectedCardIndex,
-    skipButton: {
-      lifeRecoveredBySkippingTurn: lessonDisplay.lifeRecoveredBySkippingTurn,
-      onClick: onClickSkipButton,
-    },
-    specialTrainingLevelSelect: {
-      setSpecialTrainingLevelInputValue,
-      specialTrainingLevelInputValue,
-    },
-    talentAwakeningLevelSelect: {
-      talentAwakeningLevelInputValue,
-      setTalentAwakeningLevelInputValue,
-    },
-    turnInformation: lessonDisplay.currentTurn,
   };
 };

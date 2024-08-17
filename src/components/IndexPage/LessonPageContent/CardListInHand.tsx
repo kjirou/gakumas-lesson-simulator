@@ -1,6 +1,6 @@
 import { type CardInHandDisplay, LessonDisplay } from "gakumas-core";
 import React, { useCallback, useMemo } from "react";
-import { actionCostKindToText, cardEffectDisplayKindToText } from "./utils";
+import { actionCostKindToText, cardEffectDisplayKindToText } from "../utils";
 
 type CardInHandProps = {
   card: CardInHandDisplay;

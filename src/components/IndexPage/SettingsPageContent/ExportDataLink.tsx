@@ -1,5 +1,5 @@
 import React from "react";
-import { createJsonDataUri } from "./utils";
+import { createJsonDataUri } from "../utils";
 
 const downloadFileName = "gakumas-lesson-simulator.json";
 

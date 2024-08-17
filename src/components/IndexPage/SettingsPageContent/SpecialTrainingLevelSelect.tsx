@@ -1,6 +1,6 @@
 import { Select } from "@headlessui/react";
 import React from "react";
-import { specialTrainingLevelSelectOptions } from "./utils";
+import { specialTrainingLevelSelectOptions } from "../utils";
 
 type Props = {
   setSpecialTrainingLevelInputValue: (
