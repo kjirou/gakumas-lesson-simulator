@@ -1,25 +1,10 @@
-import {
-  GamePlay,
-  IdolDataId,
-  LessonDisplay,
-  endTurn,
-  generateCardPlayPreviewDisplay,
-  generateLessonDisplay,
-  getIdolParameterKindOnTurn,
-  getLesson,
-  getNextPhase,
-  initializeGamePlay,
-  playCard,
-  skipTurn,
-  startTurn,
-} from "gakumas-core";
+import { IdolDataId } from "gakumas-core";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IndexPageView } from "./View";
 import {
   InitializeGamePlayParams,
   SavedData,
   SavedDataManager,
-  createCharacterFullName,
   defaultSavedData,
   specialTrainingLevelSelectOptions,
   talentAwakeningLevelSelectOptions,
@@ -342,49 +327,51 @@ export const usePageView = (savedDataManager: SavedDataManager): Props => {
   } = settingInputValues;
   useLocalStorageSynchronization(newSavedData);
   return {
-    clearScoreThresholdsInputSet: {
-      clearScoreInputValue,
-      perfectScoreInputValue,
-      setClearScoreInputValue,
-      setPerfectScoreInputValue,
-    },
-    exportDataLink: {
-      data: newSavedData,
-    },
-    idolSelect: {
-      idolDataIdInputValue,
-      setIdolDataIdInputValue,
-    },
-    importDataButton: {
-      setImportedJson: savedDataManager.setImportedJson,
-    },
     lessonPageContent: {
       gamePlaySettings,
     },
-    lifeInput: {
-      lifeInputValue,
-      setLifeInputValue,
-    },
-    maxLifeInput: {
-      maxLifeInputValue,
-      setMaxLifeInputValue,
-    },
-    resetSettingsButtonProps: {
-      clearSavedData: savedDataManager.clearSavedData,
-    },
-    scoreBonusInputSet: {
-      isScoreBonusEnabledInputValue,
-      scoreBonusInputValueSet,
-      setIsScoreBonusEnabledInputValue,
-      setScoreBonusInputValueSet,
-    },
-    specialTrainingLevelSelect: {
-      setSpecialTrainingLevelInputValue,
-      specialTrainingLevelInputValue,
-    },
-    talentAwakeningLevelSelect: {
-      talentAwakeningLevelInputValue,
-      setTalentAwakeningLevelInputValue,
+    settingsPageContent: {
+      clearScoreThresholdsInputSet: {
+        clearScoreInputValue,
+        perfectScoreInputValue,
+        setClearScoreInputValue,
+        setPerfectScoreInputValue,
+      },
+      exportDataLink: {
+        data: newSavedData,
+      },
+      idolSelect: {
+        idolDataIdInputValue,
+        setIdolDataIdInputValue,
+      },
+      importDataButton: {
+        setImportedJson: savedDataManager.setImportedJson,
+      },
+      lifeInput: {
+        lifeInputValue,
+        setLifeInputValue,
+      },
+      maxLifeInput: {
+        maxLifeInputValue,
+        setMaxLifeInputValue,
+      },
+      resetSettingsButtonProps: {
+        clearSavedData: savedDataManager.clearSavedData,
+      },
+      scoreBonusInputSet: {
+        isScoreBonusEnabledInputValue,
+        scoreBonusInputValueSet,
+        setIsScoreBonusEnabledInputValue,
+        setScoreBonusInputValueSet,
+      },
+      specialTrainingLevelSelect: {
+        setSpecialTrainingLevelInputValue,
+        specialTrainingLevelInputValue,
+      },
+      talentAwakeningLevelSelect: {
+        talentAwakeningLevelInputValue,
+        setTalentAwakeningLevelInputValue,
+      },
     },
   };
 };

@@ -1,6 +1,6 @@
 import { Input } from "@headlessui/react";
 import React from "react";
-import { SavedData } from "./utils";
+import { SavedData } from "../utils";
 
 type Props = {
   isScoreBonusEnabledInputValue: boolean;

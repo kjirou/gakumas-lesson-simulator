@@ -1,6 +1,6 @@
 import { Select } from "@headlessui/react";
 import React from "react";
-import { talentAwakeningLevelSelectOptions } from "./utils";
+import { talentAwakeningLevelSelectOptions } from "../utils";
 
 type Props = {
   setTalentAwakeningLevelInputValue: (

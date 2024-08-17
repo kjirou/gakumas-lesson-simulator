@@ -1,11 +1,9 @@
 import { Input } from "@headlessui/react";
-import { IdolDataId, isIdolDataIdType } from "gakumas-core";
 import React from "react";
-import { useSavedDataManager } from "./hooks";
-import { selectableIdols } from "./utils";
+import { SavedDataManager } from "../utils";
 
 type Props = {
-  setImportedJson: ReturnType<typeof useSavedDataManager>["setImportedJson"];
+  setImportedJson: SavedDataManager["setImportedJson"];
 };
 
 const ImportDataButtonRaw: React.FC<Props> = (props) => {

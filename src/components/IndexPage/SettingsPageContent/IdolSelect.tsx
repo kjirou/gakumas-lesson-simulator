@@ -1,7 +1,7 @@
 import { Select } from "@headlessui/react";
 import { IdolDataId, isIdolDataIdType } from "gakumas-core";
 import React from "react";
-import { selectableIdols } from "./utils";
+import { selectableIdols } from "../utils";
 
 type Props = {
   idolDataIdInputValue: IdolDataId;
