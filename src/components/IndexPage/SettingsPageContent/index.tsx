@@ -11,6 +11,7 @@ import {
 } from "@headlessui/react";
 import React from "react";
 import { PageContent } from "../PageContent";
+import { CardManager } from "./CardManager";
 import { ClearScoreThresholdsInputSet } from "./ClearScoreThresholdsInputSet";
 import { ExportDataLink } from "./ExportDataLink";
 import { IdolSelect } from "./IdolSelect";
@@ -22,6 +23,7 @@ import { ScoreBonusInputSet } from "./ScoreBonusInputSet";
 import { SpecialTrainingLevelSelect } from "./SpecialTrainingLevelSelect";
 import { TalentAwakeningLevelSelect } from "./TalentAwakeningLevelSelect";
 
+type CardManagerProps = React.ComponentProps<typeof CardManager>;
 type ClearScoreThresholdsInputSetProps = React.ComponentProps<
   typeof ClearScoreThresholdsInputSet
 >;
@@ -58,6 +60,7 @@ const TabPanelOnPageContent: React.FC<{ children: React.ReactNode }> = ({
 };
 
 type Props = {
+  cardManager: CardManagerProps;
   clearScoreThresholdsInputSet: ClearScoreThresholdsInputSetProps;
   exportDataLink: ExportDataLinkProps;
   idolSelect: IdolSelectProps;
@@ -92,7 +95,7 @@ const SettingsPageContentRaw: React.FC<Props> = (props) => {
                 </div>
               </Field>
               <Field>
-                <Label className="text-sm">特訓段階:</Label>
+                <Label className="text-sm">特訓:</Label>
                 <SpecialTrainingLevelSelect
                   {...props.specialTrainingLevelSelect}
                 />
@@ -137,7 +140,7 @@ const SettingsPageContentRaw: React.FC<Props> = (props) => {
           </TabPanelOnPageContent>
           <TabPanelOnPageContent>ターン・応援/トラブル</TabPanelOnPageContent>
           <TabPanelOnPageContent>
-            スキルカード検索＆追加＆削除・整列・強化On/Off・固有追加・初期カードセット追加・整列順に引く
+            <CardManager {...props.cardManager} />
           </TabPanelOnPageContent>
           <TabPanelOnPageContent>
             Pアイテム検索＆追加＆削除・固有追加
