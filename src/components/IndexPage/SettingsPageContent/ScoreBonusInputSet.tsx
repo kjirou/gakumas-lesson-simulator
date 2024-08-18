@@ -1,14 +1,12 @@
 import { Input } from "@headlessui/react";
 import React from "react";
-import { SavedData } from "../utils";
+import { SettingInputValues, SettingInputValueSetters } from "../utils";
 
 type Props = {
   isScoreBonusEnabledInputValue: boolean;
-  scoreBonusInputValueSet: SavedData["scoreBonus"]["values"];
+  scoreBonusInputValueSet: SettingInputValues["scoreBonusInputValueSet"];
   setIsScoreBonusEnabledInputValue: (state: boolean) => void;
-  setScoreBonusInputValueSet: (
-    state: SavedData["scoreBonus"]["values"],
-  ) => void;
+  setScoreBonusInputValueSet: SettingInputValueSetters["setScoreBonusInputValueSet"];
 };
 
 const ScoreBonusInputSetRaw: React.FC<Props> = (props) => {

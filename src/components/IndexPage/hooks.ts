@@ -5,9 +5,9 @@ import {
   InitializeGamePlayParams,
   SavedData,
   SavedDataManager,
+  SettingInputValues,
+  SettingInputValueSetters,
   defaultSavedData,
-  specialTrainingLevelSelectOptions,
-  talentAwakeningLevelSelectOptions,
 } from "./utils";
 
 type Props = React.ComponentProps<typeof IndexPageView>;
@@ -62,71 +62,6 @@ export const useSavedDataManager = (): SavedDataManager => {
 };
 
 /**
- * アプリケーションの設定値に使われている入力値群
- *
- * - 設定値は、全て保存の対象にする
- */
-type SettingInputValues = {
-  clearScoreInputValue: string;
-  idolDataIdInputValue: IdolDataId;
-  isScoreBonusEnabledInputValue: boolean;
-  lifeInputValue: string;
-  maxLifeInputValue: string;
-  perfectScoreInputValue: string;
-  scoreBonusInputValueSet: SavedData["scoreBonus"]["values"];
-  specialTrainingLevelInputValue: (typeof specialTrainingLevelSelectOptions)[number];
-  talentAwakeningLevelInputValue: (typeof talentAwakeningLevelSelectOptions)[number];
-};
-
-type SettingInputValueSetters = {
-  setClearScoreInputValue: (
-    value: SettingInputValues["clearScoreInputValue"],
-  ) => void;
-  setIdolDataIdInputValue: (
-    value: SettingInputValues["idolDataIdInputValue"],
-  ) => void;
-  setIsScoreBonusEnabledInputValue: (
-    value: SettingInputValues["isScoreBonusEnabledInputValue"],
-  ) => void;
-  setLifeInputValue: (value: SettingInputValues["lifeInputValue"]) => void;
-  setMaxLifeInputValue: (
-    value: SettingInputValues["maxLifeInputValue"],
-  ) => void;
-  setPerfectScoreInputValue: (
-    value: SettingInputValues["perfectScoreInputValue"],
-  ) => void;
-  setScoreBonusInputValueSet: (
-    value: SettingInputValues["scoreBonusInputValueSet"],
-  ) => void;
-  setSpecialTrainingLevelInputValue: (
-    value: SettingInputValues["specialTrainingLevelInputValue"],
-  ) => void;
-  setTalentAwakeningLevelInputValue: (
-    value: SettingInputValues["talentAwakeningLevelInputValue"],
-  ) => void;
-};
-
-const convertInputValuesToSavedData = (
-  params: SettingInputValues,
-): SavedData => {
-  return {
-    clearScoreThresholds: {
-      clear: params.clearScoreInputValue,
-      perfect: params.perfectScoreInputValue,
-    },
-    idolDataId: params.idolDataIdInputValue,
-    life: params.lifeInputValue,
-    maxLife: params.maxLifeInputValue,
-    scoreBonus: {
-      isEnabled: params.isScoreBonusEnabledInputValue,
-      values: params.scoreBonusInputValueSet,
-    },
-    specialTrainingLevel: params.specialTrainingLevelInputValue,
-    talentAwakeningLevel: params.talentAwakeningLevelInputValue,
-  };
-};
-
-/**
  * initializeGamePlay に渡す引数を生成する
  *
  * @param inputValues メモ化されている値であること
@@ -158,21 +93,7 @@ const useGamePlaySettings = (
           }
         : undefined;
     return {
-      cards: [],
-      // cards: [
-      //   { id: "hombanzenya", enhanced: true },
-      //   { id: "hombanzenya" },
-      //   { id: "genkinaaisatsu", enhanced: true },
-      //   { id: "watashigasuta", enhanced: true },
-      //   { id: "watashigasuta", enhanced: true },
-      //   { id: "watashigasuta" },
-      //   { id: "kokumintekiaidoru" },
-      //   ...getCardSetDataById("defaultLogicMotivation").cardDataIds.map(
-      //     (cardDataId: any) => ({
-      //       id: cardDataId,
-      //     }),
-      //   ),
-      // ],
+      cards: inputValues.cardsInputValue,
       clearScoreThresholds,
       idolDataId: inputValues.idolDataIdInputValue,
       life:
@@ -183,6 +104,8 @@ const useGamePlaySettings = (
         inputValues.maxLifeInputValue !== ""
           ? Number(inputValues.maxLifeInputValue)
           : undefined,
+      noDeckShuffle: inputValues.isDeckOrderFixedInputValue,
+      noIdolSpecificCard: true,
       producerItems: [],
       scoreBonus,
       specialTrainingLevel: Number(inputValues.specialTrainingLevelInputValue),
@@ -198,55 +121,74 @@ const useSettingVariables = (
   gamePlaySettings: InitializeGamePlayParams;
   newSavedData: SavedData;
   settingInputValues: SettingInputValues;
-  setters: SettingInputValueSetters;
+  settingInputValueSetters: SettingInputValueSetters;
 } => {
+  const savedSettingInputValues = savedData.settingInputValues;
   const [idolDataIdInputValue, setIdolDataIdInputValue] = useState<
     SettingInputValues["idolDataIdInputValue"]
-  >(savedData.idolDataId);
+  >(savedSettingInputValues.idolDataIdInputValue);
   const [specialTrainingLevelInputValue, setSpecialTrainingLevelInputValue] =
     useState<SettingInputValues["specialTrainingLevelInputValue"]>(
-      savedData.specialTrainingLevel,
+      savedSettingInputValues.specialTrainingLevelInputValue,
     );
   const [talentAwakeningLevelInputValue, setTalentAwakeningLevelInputValue] =
     useState<SettingInputValues["talentAwakeningLevelInputValue"]>(
-      savedData.talentAwakeningLevel,
+      savedSettingInputValues.talentAwakeningLevelInputValue,
     );
   const [lifeInputValue, setLifeInputValue] = useState<
     SettingInputValues["lifeInputValue"]
-  >(savedData.life);
+  >(savedSettingInputValues.lifeInputValue);
   const [maxLifeInputValue, setMaxLifeInputValue] = useState<
     SettingInputValues["maxLifeInputValue"]
-  >(savedData.maxLife);
+  >(savedSettingInputValues.maxLifeInputValue);
   const [isScoreBonusEnabledInputValue, setIsScoreBonusEnabledInputValue] =
     useState<SettingInputValues["isScoreBonusEnabledInputValue"]>(
-      savedData.scoreBonus.isEnabled,
+      savedSettingInputValues.isDeckOrderFixedInputValue,
     );
   const [scoreBonusInputValueSet, setScoreBonusInputValueSet] = useState<
     SettingInputValues["scoreBonusInputValueSet"]
-  >(savedData.scoreBonus.values);
+  >(savedSettingInputValues.scoreBonusInputValueSet);
   const [clearScoreInputValue, setClearScoreInputValue] = useState<
     SettingInputValues["clearScoreInputValue"]
-  >(savedData.clearScoreThresholds.clear);
+  >(savedSettingInputValues.clearScoreInputValue);
   const [perfectScoreInputValue, setPerfectScoreInputValue] = useState<
     SettingInputValues["perfectScoreInputValue"]
-  >(savedData.clearScoreThresholds.perfect);
+  >(savedSettingInputValues.perfectScoreInputValue);
+  const [isDeckOrderFixedInputValue, setIsDeckOrderFixedInputValue] = useState<
+    SettingInputValues["isDeckOrderFixedInputValue"]
+  >(savedSettingInputValues.isDeckOrderFixedInputValue);
+  const [cardsInputValue, setCardsInputValue] = useState<
+    SettingInputValues["cardsInputValue"]
+  >(savedSettingInputValues.cardsInputValue);
   const [beforeSavedData, setBeforeSavedData] = useState<SavedData>(savedData);
   if (savedData !== beforeSavedData) {
-    setIdolDataIdInputValue(savedData.idolDataId);
-    setSpecialTrainingLevelInputValue(savedData.specialTrainingLevel);
-    setTalentAwakeningLevelInputValue(savedData.talentAwakeningLevel);
-    setLifeInputValue(savedData.life);
-    setMaxLifeInputValue(savedData.maxLife);
-    setIsScoreBonusEnabledInputValue(savedData.scoreBonus.isEnabled);
-    setScoreBonusInputValueSet(savedData.scoreBonus.values);
-    setClearScoreInputValue(savedData.clearScoreThresholds.clear);
-    setPerfectScoreInputValue(savedData.clearScoreThresholds.perfect);
+    setIdolDataIdInputValue(savedSettingInputValues.idolDataIdInputValue);
+    setSpecialTrainingLevelInputValue(
+      savedSettingInputValues.specialTrainingLevelInputValue,
+    );
+    setTalentAwakeningLevelInputValue(
+      savedSettingInputValues.talentAwakeningLevelInputValue,
+    );
+    setLifeInputValue(savedSettingInputValues.lifeInputValue);
+    setMaxLifeInputValue(savedSettingInputValues.maxLifeInputValue);
+    setIsScoreBonusEnabledInputValue(
+      savedSettingInputValues.isScoreBonusEnabledInputValue,
+    );
+    setScoreBonusInputValueSet(savedSettingInputValues.scoreBonusInputValueSet);
+    setClearScoreInputValue(savedSettingInputValues.clearScoreInputValue);
+    setPerfectScoreInputValue(savedSettingInputValues.perfectScoreInputValue);
+    setIsDeckOrderFixedInputValue(
+      savedSettingInputValues.isDeckOrderFixedInputValue,
+    );
+    setCardsInputValue(savedSettingInputValues.cardsInputValue);
     setBeforeSavedData(savedData);
   }
   const settingInputValues = useMemo<SettingInputValues>(() => {
     return {
+      cardsInputValue,
       clearScoreInputValue,
       idolDataIdInputValue,
+      isDeckOrderFixedInputValue,
       isScoreBonusEnabledInputValue,
       lifeInputValue,
       maxLifeInputValue,
@@ -256,8 +198,10 @@ const useSettingVariables = (
       talentAwakeningLevelInputValue,
     };
   }, [
+    cardsInputValue,
     clearScoreInputValue,
     idolDataIdInputValue,
+    isDeckOrderFixedInputValue,
     isScoreBonusEnabledInputValue,
     lifeInputValue,
     maxLifeInputValue,
@@ -267,16 +211,19 @@ const useSettingVariables = (
     talentAwakeningLevelInputValue,
   ]);
   const newSavedData = useMemo(
-    () => convertInputValuesToSavedData(settingInputValues),
+    () => ({ settingInputValues }),
     [settingInputValues],
   );
   const gamePlaySettings = useGamePlaySettings(settingInputValues);
   return {
     gamePlaySettings,
     newSavedData,
-    setters: {
+    settingInputValues,
+    settingInputValueSetters: {
+      setCardsInputValue,
       setClearScoreInputValue,
       setIdolDataIdInputValue,
+      setIsDeckOrderFixedInputValue,
       setIsScoreBonusEnabledInputValue,
       setLifeInputValue,
       setMaxLifeInputValue,
@@ -285,7 +232,6 @@ const useSettingVariables = (
       setSpecialTrainingLevelInputValue,
       setTalentAwakeningLevelInputValue,
     },
-    settingInputValues,
   };
 };
 
@@ -303,23 +249,15 @@ const useLocalStorageSynchronization = (savedData: SavedData) => {
 export const usePageView = (savedDataManager: SavedDataManager): Props => {
   const {
     settingInputValues,
-    setters: {
-      setClearScoreInputValue,
-      setIdolDataIdInputValue,
-      setIsScoreBonusEnabledInputValue,
-      setLifeInputValue,
-      setMaxLifeInputValue,
-      setPerfectScoreInputValue,
-      setScoreBonusInputValueSet,
-      setSpecialTrainingLevelInputValue,
-      setTalentAwakeningLevelInputValue,
-    },
+    settingInputValueSetters,
     newSavedData,
     gamePlaySettings,
   } = useSettingVariables(savedDataManager.savedData);
   const {
+    cardsInputValue,
     clearScoreInputValue,
     idolDataIdInputValue,
+    isDeckOrderFixedInputValue,
     isScoreBonusEnabledInputValue,
     lifeInputValue,
     maxLifeInputValue,
@@ -328,12 +266,33 @@ export const usePageView = (savedDataManager: SavedDataManager): Props => {
     specialTrainingLevelInputValue,
     talentAwakeningLevelInputValue,
   } = settingInputValues;
+  const {
+    setCardsInputValue,
+    setClearScoreInputValue,
+    setIdolDataIdInputValue,
+    setIsDeckOrderFixedInputValue,
+    setIsScoreBonusEnabledInputValue,
+    setLifeInputValue,
+    setMaxLifeInputValue,
+    setPerfectScoreInputValue,
+    setScoreBonusInputValueSet,
+    setSpecialTrainingLevelInputValue,
+    setTalentAwakeningLevelInputValue,
+  } = settingInputValueSetters;
   useLocalStorageSynchronization(newSavedData);
   return {
     lessonPageContent: {
       gamePlaySettings,
     },
     settingsPageContent: {
+      cardManager: {
+        cardsInputValue,
+        idolDataIdInputValue,
+        isDeckOrderFixedInputValue,
+        setCardsInputValue,
+        setIsDeckOrderFixedInputValue,
+        specialTrainingLevelInputValue,
+      },
       clearScoreThresholdsInputSet: {
         clearScoreInputValue,
         perfectScoreInputValue,

@@ -171,44 +171,83 @@ export const talentAwakeningLevelSelectOptions = [
 ] as const;
 
 /**
- * 主に設定値の保存のために、ローカルストレージやファイルへ保存するJSON形式のデータ
+ * アプリケーションの設定値に使われている入力値群
  *
- * - 基本的には、入力値群を表現したものなので、個々の値は string か boolean になる
+ * - ここにある値は、全て保存の対象になる
+ */
+export type SettingInputValues = {
+  cardsInputValue: InitializeGamePlayParams["cards"];
+  clearScoreInputValue: string;
+  idolDataIdInputValue: IdolDataId;
+  isDeckOrderFixedInputValue: boolean;
+  isScoreBonusEnabledInputValue: boolean;
+  lifeInputValue: string;
+  maxLifeInputValue: string;
+  perfectScoreInputValue: string;
+  scoreBonusInputValueSet: Record<IdolParameterKind, string>;
+  specialTrainingLevelInputValue: (typeof specialTrainingLevelSelectOptions)[number];
+  talentAwakeningLevelInputValue: (typeof talentAwakeningLevelSelectOptions)[number];
+};
+
+export type SettingInputValueSetters = {
+  setCardsInputValue: React.Dispatch<
+    React.SetStateAction<SettingInputValues["cardsInputValue"]>
+  >;
+  setClearScoreInputValue: (
+    value: SettingInputValues["clearScoreInputValue"],
+  ) => void;
+  setIdolDataIdInputValue: (
+    value: SettingInputValues["idolDataIdInputValue"],
+  ) => void;
+  setIsDeckOrderFixedInputValue: React.Dispatch<
+    React.SetStateAction<SettingInputValues["isDeckOrderFixedInputValue"]>
+  >;
+  setIsScoreBonusEnabledInputValue: (
+    value: SettingInputValues["isScoreBonusEnabledInputValue"],
+  ) => void;
+  setLifeInputValue: (value: SettingInputValues["lifeInputValue"]) => void;
+  setMaxLifeInputValue: (
+    value: SettingInputValues["maxLifeInputValue"],
+  ) => void;
+  setPerfectScoreInputValue: (
+    value: SettingInputValues["perfectScoreInputValue"],
+  ) => void;
+  setScoreBonusInputValueSet: (
+    value: SettingInputValues["scoreBonusInputValueSet"],
+  ) => void;
+  setSpecialTrainingLevelInputValue: (
+    value: SettingInputValues["specialTrainingLevelInputValue"],
+  ) => void;
+  setTalentAwakeningLevelInputValue: (
+    value: SettingInputValues["talentAwakeningLevelInputValue"],
+  ) => void;
+};
+
+/**
+ * 主に設定値の保存のために、ローカルストレージやファイルへ保存するJSON形式のデータ
  */
 export type SavedData = {
-  clearScoreThresholds: {
-    clear: string;
-    perfect: string;
-  };
-  idolDataId: IdolDataId;
-  life: string;
-  maxLife: string;
-  scoreBonus: {
-    isEnabled: boolean;
-    values: Record<IdolParameterKind, string>;
-  };
-  specialTrainingLevel: (typeof specialTrainingLevelSelectOptions)[number];
-  talentAwakeningLevel: (typeof talentAwakeningLevelSelectOptions)[number];
+  settingInputValues: SettingInputValues;
 };
 
 export const defaultSavedData: SavedData = {
-  clearScoreThresholds: {
-    clear: "",
-    perfect: "",
-  },
-  idolDataId: "hanamisaki-ssr-1",
-  life: "",
-  maxLife: "",
-  scoreBonus: {
-    isEnabled: false,
-    values: {
+  settingInputValues: {
+    cardsInputValue: [],
+    clearScoreInputValue: "",
+    perfectScoreInputValue: "",
+    idolDataIdInputValue: "hanamisaki-ssr-1",
+    isDeckOrderFixedInputValue: false,
+    lifeInputValue: "",
+    maxLifeInputValue: "",
+    isScoreBonusEnabledInputValue: false,
+    scoreBonusInputValueSet: {
       vocal: "100",
       dance: "100",
       visual: "100",
     },
+    specialTrainingLevelInputValue: "3",
+    talentAwakeningLevelInputValue: "2",
   },
-  specialTrainingLevel: "3",
-  talentAwakeningLevel: "2",
 };
 
 export type SavedDataManager = {
@@ -217,3 +256,11 @@ export type SavedDataManager = {
   savedData: SavedData;
   setImportedJson: (state: string) => void;
 };
+
+export const canCardBeEnhancedWithSpecialTrainingLevel = (
+  inputValue: SettingInputValues["specialTrainingLevelInputValue"],
+) => Number(inputValue) >= 3;
+
+export const canProducerItemBeEnhancedWithTalentAwakeningLevel = (
+  inputValue: SettingInputValues["talentAwakeningLevelInputValue"],
+) => Number(inputValue) >= 2;
