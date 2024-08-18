@@ -21,7 +21,7 @@
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
     "@headlessui/react": "^2.1.2",
-    "gakumas-core": "^0.0.5",
+    "gakumas-core": "^0.0.6",
     "gatsby": "^5.13.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
