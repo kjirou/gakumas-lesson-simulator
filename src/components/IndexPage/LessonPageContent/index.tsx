@@ -95,7 +95,7 @@ const LessonPageContentRaw: React.FC<Props> = (props) => {
   let idolInformation: IdolInformationProps = {
     fullName: createCharacterFullName(lesson.idol.data.characterId),
     life: lessonDisplay.life,
-    maxLife: lesson.idol.maxLife,
+    maxLife: lessonDisplay.maxLife,
     vitality: lessonDisplay.vitality,
   };
   let modifierList: ModifierListProps = { modifiers: lessonDisplay.modifiers };
