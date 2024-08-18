@@ -144,9 +144,9 @@ const SettingsPageContentRaw: React.FC<Props> = (props) => {
                 <ResetSettingsButton {...props.resetSettingsButtonProps} />
               </Field>
             </Fieldset>
-            <ul>
-              <li className="text-sm">
-                <span>不具合報告等:</span>
+            <ul className="absolute bottom-[0px] text-sm">
+              <li>
+                <span>不具合報告等は</span>
                 <a
                   className="underline text-blue-500"
                   href="https://x.com/kjirou"
@@ -164,6 +164,7 @@ const SettingsPageContentRaw: React.FC<Props> = (props) => {
                 </a>
                 <span>のIssuesへお願いします</span>
               </li>
+              <li>学マスレッスンシミュレーター（β）</li>
             </ul>
           </TabPanelOnPageContent>
           <TabPanelOnPageContent>
