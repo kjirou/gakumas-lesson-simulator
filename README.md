@@ -1,49 +1,39 @@
-<p align="center">
-  <a href="https://www.gatsbyjs.com/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter-ts">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby Minimal TypeScript Starter
-</h1>
+# gakumas-lesson-simulator
 
-## 🚀 Quick start
+学マスレッスンシミュレーター: https://gakumas-lesson-simulator.netlify.app
 
-1.  **Create a Gatsby site.**
+学園アイドルマスターのカードゲーム部分のシミュレーター（β版）
 
-    Use the Gatsby CLI to create a new site, specifying the minimal TypeScript starter.
+## :cat: 特徴
 
-    ```shell
-    # create a new Gatsby site using the minimal TypeScript starter
-    npm init gatsby -- -ts
-    ```
+- [学園アイドルマスター](https://gakuen.idolmaster-official.jp/)（通称:学マス）のカードゲーム部分を再現したシミュレーターです。
+- ゲームのロジック本体は、コアエンジンとして https://github.com/kjirou/gakumas-core へ分離しています。
 
-2.  **Start developing.**
+## :writing_hand: 主なTODO
 
-    Navigate into your new site’s directory and start it up.
+- [ ] Pドリンクを設定できない
+- [ ] 応援/トラブルを設定できない
+  - 特にコンテストの設定だけでもできるようにしたい
+- [ ] デザイン
+- [ ] 統計を出す？
+- [ ] ゲームロジックやデータの不足
+  - [コアエンジン側のTODO](https://github.com/kjirou/gakumas-core?tab=readme-ov-file#writing_hand-%E4%B8%BB%E3%81%AAtodo)を参照
 
-    ```shell
-    cd my-gatsby-site/
-    npm run develop
-    ```
+作ってみたはいいですが、使い道が思いつかないので、アイディア募集中です。
 
-3.  **Open the code and start customizing!**
+特に、コアエンジンを使って何か作ってくれると、とてもありがたいです。
 
-    Your site is now running at http://localhost:8000!
+## :hammer_and_wrench: 開発
 
-    Edit `src/pages/index.tsx` to see your site update in real-time!
+### 準備
 
-4.  **Learn more**
+- [Node.js](https://nodejs.org/)のインストール
+  - バージョンは[.nvmrc](/.nvmrc)と同じ
 
-    - [Documentation](https://www.gatsbyjs.com/docs/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter-ts)
-    - [Tutorials](https://www.gatsbyjs.com/docs/tutorial/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter-ts)
-    - [Guides](https://www.gatsbyjs.com/docs/how-to/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter-ts)
-    - [API Reference](https://www.gatsbyjs.com/docs/api-reference/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter-ts)
-    - [Plugin Library](https://www.gatsbyjs.com/plugins?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter-ts)
-    - [Cheat Sheet](https://www.gatsbyjs.com/docs/cheat-sheet/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter-ts)
+### インストール手順
 
-## 🚀 Quick start (Netlify)
-
-Deploy this starter with one click on [Netlify](https://app.netlify.com/signup):
-
-[<img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to Netlify" />](https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-minimal-ts)
+```
+git clone git@github.com:kjirou/gakumas-lesson-simulator.git
+cd ./gakumas-lesson-simulator
+npm install
+```
