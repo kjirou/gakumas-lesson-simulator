@@ -144,6 +144,27 @@ const SettingsPageContentRaw: React.FC<Props> = (props) => {
                 <ResetSettingsButton {...props.resetSettingsButtonProps} />
               </Field>
             </Fieldset>
+            <ul>
+              <li className="text-sm">
+                <span>不具合報告等:</span>
+                <a
+                  className="underline text-blue-500"
+                  href="https://x.com/kjirou"
+                  target="_blank"
+                >
+                  X
+                </a>
+                <span>か</span>
+                <a
+                  className="underline text-blue-500"
+                  href="https://github.com/kjirou/gakumas-lesson-simulator"
+                  target="_blank"
+                >
+                  GitHub
+                </a>
+                <span>のIssuesへお願いします</span>
+              </li>
+            </ul>
           </TabPanelOnPageContent>
           <TabPanelOnPageContent>
             <TurnManager {...props.turnManager} />

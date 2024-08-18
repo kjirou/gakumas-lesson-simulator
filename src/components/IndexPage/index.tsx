@@ -5,7 +5,7 @@ import { usePageView, useSavedDataManager } from "./hooks";
 import { SavedDataManager } from "./utils";
 
 const siteUrl = "https://gakumas-lesson-simulator.netlify.app/";
-const siteTitle = "学マスレッスンシミュレーター";
+const siteTitle = "学マスレッスンシミュレーター（β）";
 const siteSummary =
   "学園アイドルマスター（学マス）のレッスンを自由に設定して、シミュレーションできるツールです。";
 const ogImageUrl = `${siteUrl}og-image.png`;
