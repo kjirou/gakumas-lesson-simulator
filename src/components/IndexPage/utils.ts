@@ -23,6 +23,20 @@ import {
   isLessonEnded,
 } from "gakumas-core";
 
+export const idolParameterKindToText = (kind: IdolParameterKind): string => {
+  switch (kind) {
+    case "dance":
+      return "ダンス";
+    case "visual":
+      return "ビジュアル";
+    case "vocal":
+      return "ボーカル";
+    default:
+      const unreachable: never = kind;
+      throw new Error("Unreachable statement");
+  }
+};
+
 export const idolParameterKindToTextColorClassName = (
   kind: IdolParameterKind,
 ): string => {
@@ -152,6 +166,12 @@ export const selectableIdols: SelectableIdol[] = idols.map((idol) => {
   };
 });
 
+export const idolParameterKindSelectOptions = [
+  "vocal",
+  "dance",
+  "visual",
+] as const satisfies IdolParameterKind[];
+
 export const specialTrainingLevelSelectOptions = [
   "0",
   "1",
@@ -187,6 +207,7 @@ export type SettingInputValues = {
   scoreBonusInputValueSet: Record<IdolParameterKind, string>;
   specialTrainingLevelInputValue: (typeof specialTrainingLevelSelectOptions)[number];
   talentAwakeningLevelInputValue: (typeof talentAwakeningLevelSelectOptions)[number];
+  turnsInputValue: InitializeGamePlayParams["turns"];
 };
 
 export type SettingInputValueSetters = {
@@ -221,6 +242,9 @@ export type SettingInputValueSetters = {
   setTalentAwakeningLevelInputValue: (
     value: SettingInputValues["talentAwakeningLevelInputValue"],
   ) => void;
+  setTurnsInputValue: React.Dispatch<
+    React.SetStateAction<SettingInputValues["turnsInputValue"]>
+  >;
 };
 
 /**
@@ -247,6 +271,7 @@ export const defaultSavedData: SavedData = {
     },
     specialTrainingLevelInputValue: "3",
     talentAwakeningLevelInputValue: "2",
+    turnsInputValue: ["vocal", "dance", "visual"],
   },
 };
 
