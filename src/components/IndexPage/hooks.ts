@@ -110,7 +110,7 @@ const useGamePlaySettings = (
       scoreBonus,
       specialTrainingLevel: Number(inputValues.specialTrainingLevelInputValue),
       talentAwakeningLevel: Number(inputValues.talentAwakeningLevelInputValue),
-      turns: ["vocal", "dance", "visual"],
+      turns: inputValues.turnsInputValue,
     };
   }, [inputValues]);
 };
@@ -157,6 +157,9 @@ const useSettingVariables = (
   const [isDeckOrderFixedInputValue, setIsDeckOrderFixedInputValue] = useState<
     SettingInputValues["isDeckOrderFixedInputValue"]
   >(savedSettingInputValues.isDeckOrderFixedInputValue);
+  const [turnsInputValue, setTurnsInputValue] = useState<
+    SettingInputValues["turnsInputValue"]
+  >(savedSettingInputValues.turnsInputValue);
   const [cardsInputValue, setCardsInputValue] = useState<
     SettingInputValues["cardsInputValue"]
   >(savedSettingInputValues.cardsInputValue);
@@ -180,6 +183,7 @@ const useSettingVariables = (
     setIsDeckOrderFixedInputValue(
       savedSettingInputValues.isDeckOrderFixedInputValue,
     );
+    setTurnsInputValue(savedSettingInputValues.turnsInputValue);
     setCardsInputValue(savedSettingInputValues.cardsInputValue);
     setBeforeSavedData(savedData);
   }
@@ -196,6 +200,7 @@ const useSettingVariables = (
       scoreBonusInputValueSet,
       specialTrainingLevelInputValue,
       talentAwakeningLevelInputValue,
+      turnsInputValue,
     };
   }, [
     cardsInputValue,
@@ -209,6 +214,7 @@ const useSettingVariables = (
     scoreBonusInputValueSet,
     specialTrainingLevelInputValue,
     talentAwakeningLevelInputValue,
+    turnsInputValue,
   ]);
   const newSavedData = useMemo(
     () => ({ settingInputValues }),
@@ -231,6 +237,7 @@ const useSettingVariables = (
       setScoreBonusInputValueSet,
       setSpecialTrainingLevelInputValue,
       setTalentAwakeningLevelInputValue,
+      setTurnsInputValue,
     },
   };
 };
@@ -265,6 +272,7 @@ export const usePageView = (savedDataManager: SavedDataManager): Props => {
     scoreBonusInputValueSet,
     specialTrainingLevelInputValue,
     talentAwakeningLevelInputValue,
+    turnsInputValue,
   } = settingInputValues;
   const {
     setCardsInputValue,
@@ -278,6 +286,7 @@ export const usePageView = (savedDataManager: SavedDataManager): Props => {
     setScoreBonusInputValueSet,
     setSpecialTrainingLevelInputValue,
     setTalentAwakeningLevelInputValue,
+    setTurnsInputValue,
   } = settingInputValueSetters;
   useLocalStorageSynchronization(newSavedData);
   return {
@@ -333,6 +342,10 @@ export const usePageView = (savedDataManager: SavedDataManager): Props => {
       talentAwakeningLevelSelect: {
         talentAwakeningLevelInputValue,
         setTalentAwakeningLevelInputValue,
+      },
+      turnManager: {
+        turnsInputValue,
+        setTurnsInputValue,
       },
     },
   };

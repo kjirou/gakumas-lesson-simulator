@@ -22,6 +22,7 @@ import { ResetSettingsButton } from "./ResetSettingsButton";
 import { ScoreBonusInputSet } from "./ScoreBonusInputSet";
 import { SpecialTrainingLevelSelect } from "./SpecialTrainingLevelSelect";
 import { TalentAwakeningLevelSelect } from "./TalentAwakeningLevelSelect";
+import { TurnManager } from "./TurnManager";
 
 type CardManagerProps = React.ComponentProps<typeof CardManager>;
 type ClearScoreThresholdsInputSetProps = React.ComponentProps<
@@ -42,6 +43,7 @@ type SpecialTrainingLevelSelectProps = React.ComponentProps<
 type TalentAwakeningLevelSelectProps = React.ComponentProps<
   typeof TalentAwakeningLevelSelect
 >;
+type TurnManagerProps = React.ComponentProps<typeof TurnManager>;
 
 const TabOnPageContent: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -71,6 +73,7 @@ type Props = {
   scoreBonusInputSet: ScoreBonusInputSetProps;
   specialTrainingLevelSelect: SpecialTrainingLevelSelectProps;
   talentAwakeningLevelSelect: TalentAwakeningLevelSelectProps;
+  turnManager: TurnManagerProps;
 };
 
 const SettingsPageContentRaw: React.FC<Props> = (props) => {
@@ -87,7 +90,6 @@ const SettingsPageContentRaw: React.FC<Props> = (props) => {
         <TabPanels>
           <TabPanelOnPageContent>
             <Fieldset className="space-y-1">
-              <Legend className="text-lg font-bold">基本設定</Legend>
               <Field>
                 <Label className="block text-sm">アイドル:</Label>
                 <div>
@@ -138,7 +140,9 @@ const SettingsPageContentRaw: React.FC<Props> = (props) => {
               </Field>
             </Fieldset>
           </TabPanelOnPageContent>
-          <TabPanelOnPageContent>ターン・応援/トラブル</TabPanelOnPageContent>
+          <TabPanelOnPageContent>
+            <TurnManager {...props.turnManager} />
+          </TabPanelOnPageContent>
           <TabPanelOnPageContent>
             <CardManager {...props.cardManager} />
           </TabPanelOnPageContent>

@@ -1,12 +1,12 @@
 import { Input } from "@headlessui/react";
-import { IdolParameterKind } from "gakumas-core";
 import React from "react";
+import { SettingInputValues, SettingInputValueSetters } from "../utils";
 
 type Props = {
-  clearScoreInputValue: string;
-  perfectScoreInputValue: string;
-  setClearScoreInputValue: (state: string) => void;
-  setPerfectScoreInputValue: (state: string) => void;
+  clearScoreInputValue: SettingInputValues["clearScoreInputValue"];
+  perfectScoreInputValue: SettingInputValues["perfectScoreInputValue"];
+  setClearScoreInputValue: SettingInputValueSetters["setClearScoreInputValue"];
+  setPerfectScoreInputValue: SettingInputValueSetters["setPerfectScoreInputValue"];
 };
 
 const ClearScoreThresholdsInputSetRaw: React.FC<Props> = (props) => {

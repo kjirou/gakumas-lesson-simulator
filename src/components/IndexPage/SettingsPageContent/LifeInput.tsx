@@ -1,9 +1,10 @@
 import { Input } from "@headlessui/react";
 import React from "react";
+import { SettingInputValues, SettingInputValueSetters } from "../utils";
 
 type Props = {
-  lifeInputValue: string;
-  setLifeInputValue: (state: string) => void;
+  lifeInputValue: SettingInputValues["lifeInputValue"];
+  setLifeInputValue: SettingInputValueSetters["setLifeInputValue"];
 };
 
 const LifeInputRaw: React.FC<Props> = (props) => {

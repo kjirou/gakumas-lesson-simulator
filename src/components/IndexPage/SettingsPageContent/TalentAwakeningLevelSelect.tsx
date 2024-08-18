@@ -1,19 +1,21 @@
 import { Select } from "@headlessui/react";
 import React from "react";
-import { talentAwakeningLevelSelectOptions } from "../utils";
+import {
+  SettingInputValues,
+  SettingInputValueSetters,
+  talentAwakeningLevelSelectOptions,
+} from "../utils";
 
 type Props = {
-  setTalentAwakeningLevelInputValue: (
-    state: (typeof talentAwakeningLevelSelectOptions)[number],
-  ) => void;
-  talentAwakeningLevelInputValue: (typeof talentAwakeningLevelSelectOptions)[number];
+  setTalentAwakeningLevelInputValue: SettingInputValueSetters["setTalentAwakeningLevelInputValue"];
+  talentAwakeningLevelInputValue: SettingInputValues["talentAwakeningLevelInputValue"];
 };
 
 const TalentAwakeningLevelSelectRaw: React.FC<Props> = (props) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     props.setTalentAwakeningLevelInputValue(
       event.currentTarget
-        .value as (typeof talentAwakeningLevelSelectOptions)[number],
+        .value as SettingInputValues["talentAwakeningLevelInputValue"],
     );
   };
   return (

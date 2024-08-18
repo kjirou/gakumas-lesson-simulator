@@ -1,11 +1,15 @@
 import { Select } from "@headlessui/react";
 import { IdolDataId, isIdolDataIdType } from "gakumas-core";
 import React from "react";
-import { selectableIdols } from "../utils";
+import {
+  SettingInputValues,
+  SettingInputValueSetters,
+  selectableIdols,
+} from "../utils";
 
 type Props = {
-  idolDataIdInputValue: IdolDataId;
-  setIdolDataIdInputValue: (idolDataId: IdolDataId) => void;
+  idolDataIdInputValue: SettingInputValues["idolDataIdInputValue"];
+  setIdolDataIdInputValue: SettingInputValueSetters["setIdolDataIdInputValue"];
 };
 
 const IdolSelectRaw: React.FC<Props> = (props) => {
