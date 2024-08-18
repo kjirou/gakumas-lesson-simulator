@@ -1,4 +1,4 @@
-import { IdolDataId, getCardSetDataById } from "gakumas-core";
+import {} from "gakumas-core";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IndexPageView } from "./View";
 import {
@@ -106,7 +106,8 @@ const useGamePlaySettings = (
           : undefined,
       noDeckShuffle: inputValues.isDeckOrderFixedInputValue,
       noIdolSpecificCard: true,
-      producerItems: [],
+      noIdolSpecificProducerItem: true,
+      producerItems: inputValues.producerItemsInputValue,
       scoreBonus,
       specialTrainingLevel: Number(inputValues.specialTrainingLevelInputValue),
       talentAwakeningLevel: Number(inputValues.talentAwakeningLevelInputValue),
@@ -163,6 +164,9 @@ const useSettingVariables = (
   const [cardsInputValue, setCardsInputValue] = useState<
     SettingInputValues["cardsInputValue"]
   >(savedSettingInputValues.cardsInputValue);
+  const [producerItemsInputValue, setProducerItemsInputValue] = useState<
+    SettingInputValues["producerItemsInputValue"]
+  >(savedSettingInputValues.producerItemsInputValue);
   const [beforeSavedData, setBeforeSavedData] = useState<SavedData>(savedData);
   if (savedData !== beforeSavedData) {
     setIdolDataIdInputValue(savedSettingInputValues.idolDataIdInputValue);
@@ -185,6 +189,7 @@ const useSettingVariables = (
     );
     setTurnsInputValue(savedSettingInputValues.turnsInputValue);
     setCardsInputValue(savedSettingInputValues.cardsInputValue);
+    setProducerItemsInputValue(savedSettingInputValues.producerItemsInputValue);
     setBeforeSavedData(savedData);
   }
   const settingInputValues = useMemo<SettingInputValues>(() => {
@@ -197,6 +202,7 @@ const useSettingVariables = (
       lifeInputValue,
       maxLifeInputValue,
       perfectScoreInputValue,
+      producerItemsInputValue,
       scoreBonusInputValueSet,
       specialTrainingLevelInputValue,
       talentAwakeningLevelInputValue,
@@ -211,6 +217,7 @@ const useSettingVariables = (
     lifeInputValue,
     maxLifeInputValue,
     perfectScoreInputValue,
+    producerItemsInputValue,
     scoreBonusInputValueSet,
     specialTrainingLevelInputValue,
     talentAwakeningLevelInputValue,
@@ -234,6 +241,7 @@ const useSettingVariables = (
       setLifeInputValue,
       setMaxLifeInputValue,
       setPerfectScoreInputValue,
+      setProducerItemsInputValue,
       setScoreBonusInputValueSet,
       setSpecialTrainingLevelInputValue,
       setTalentAwakeningLevelInputValue,
@@ -269,6 +277,7 @@ export const usePageView = (savedDataManager: SavedDataManager): Props => {
     lifeInputValue,
     maxLifeInputValue,
     perfectScoreInputValue,
+    producerItemsInputValue,
     scoreBonusInputValueSet,
     specialTrainingLevelInputValue,
     talentAwakeningLevelInputValue,
@@ -283,6 +292,7 @@ export const usePageView = (savedDataManager: SavedDataManager): Props => {
     setLifeInputValue,
     setMaxLifeInputValue,
     setPerfectScoreInputValue,
+    setProducerItemsInputValue,
     setScoreBonusInputValueSet,
     setSpecialTrainingLevelInputValue,
     setTalentAwakeningLevelInputValue,
@@ -325,6 +335,12 @@ export const usePageView = (savedDataManager: SavedDataManager): Props => {
       maxLifeInput: {
         maxLifeInputValue,
         setMaxLifeInputValue,
+      },
+      producerItemManager: {
+        idolDataIdInputValue,
+        producerItemsInputValue,
+        setProducerItemsInputValue,
+        talentAwakeningLevelInputValue,
       },
       resetSettingsButtonProps: {
         clearSavedData: savedDataManager.clearSavedData,

@@ -204,6 +204,7 @@ export type SettingInputValues = {
   lifeInputValue: string;
   maxLifeInputValue: string;
   perfectScoreInputValue: string;
+  producerItemsInputValue: InitializeGamePlayParams["producerItems"];
   scoreBonusInputValueSet: Record<IdolParameterKind, string>;
   specialTrainingLevelInputValue: (typeof specialTrainingLevelSelectOptions)[number];
   talentAwakeningLevelInputValue: (typeof talentAwakeningLevelSelectOptions)[number];
@@ -235,6 +236,9 @@ export type SettingInputValueSetters = {
   setPerfectScoreInputValue: React.Dispatch<
     React.SetStateAction<SettingInputValues["perfectScoreInputValue"]>
   >;
+  setProducerItemsInputValue: React.Dispatch<
+    React.SetStateAction<SettingInputValues["producerItemsInputValue"]>
+  >;
   setScoreBonusInputValueSet: React.Dispatch<
     React.SetStateAction<SettingInputValues["scoreBonusInputValueSet"]>
   >;
@@ -260,12 +264,13 @@ export const defaultSavedData: SavedData = {
   settingInputValues: {
     cardsInputValue: [],
     clearScoreInputValue: "",
-    perfectScoreInputValue: "",
     idolDataIdInputValue: "hanamisaki-ssr-1",
     isDeckOrderFixedInputValue: false,
+    isScoreBonusEnabledInputValue: false,
     lifeInputValue: "",
     maxLifeInputValue: "",
-    isScoreBonusEnabledInputValue: false,
+    perfectScoreInputValue: "",
+    producerItemsInputValue: [],
     scoreBonusInputValueSet: {
       vocal: "100",
       dance: "100",

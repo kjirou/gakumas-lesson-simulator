@@ -84,7 +84,7 @@ const CardListItemRaw: React.FC<{
       >
         {props.cardName}
       </div>
-      <div className="w-4/12">
+      <div className="w-4/12 flex gap-0.5">
         <Button
           className="border select-none"
           onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
@@ -95,7 +95,7 @@ const CardListItemRaw: React.FC<{
           強化
         </Button>
         <Button
-          className="ml-1 border select-none"
+          className="border select-none"
           onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation();
             props.onClickCardCopyButton(props.listItemIndex);
@@ -104,7 +104,7 @@ const CardListItemRaw: React.FC<{
           複製
         </Button>
         <Button
-          className="ml-1 border select-none"
+          className="border select-none"
           onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation();
             props.onClickCardRemovalButton(props.listItemIndex);
@@ -135,7 +135,7 @@ const CardManagerRaw: React.FC<Props> = (props) => {
   const [isProducePlanMatched, setIsProducePlanMatched] = useState(true);
   const [doesExcludeIdolSpecific, setDoesExcludeIdolSpecific] = useState(true);
   const [query, setQuery] = useState("");
-  const filterdCards = useMemo(() => {
+  const filteredCards = useMemo(() => {
     return query === ""
       ? []
       : cards.filter((card) => {
@@ -153,7 +153,12 @@ const CardManagerRaw: React.FC<Props> = (props) => {
               card.name.toLowerCase().includes(query.toLowerCase()))
           );
         });
-  }, [isProducePlanMatched, query, props.idolDataIdInputValue]);
+  }, [
+    doesExcludeIdolSpecific,
+    isProducePlanMatched,
+    query,
+    props.idolDataIdInputValue,
+  ]);
   const handleClickIdolSpecificCardAdditionButton = useCallback(() => {
     props.setCardsInputValue((cardsState) => {
       const idolData = getIdolDataByConstId(props.idolDataIdInputValue);
@@ -165,7 +170,7 @@ const CardManagerRaw: React.FC<Props> = (props) => {
       };
       return [newCard, ...cardsState];
     });
-  }, [props.specialTrainingLevelInputValue]);
+  }, [props.idolDataIdInputValue, props.specialTrainingLevelInputValue]);
   const handleClickDefaultCardSetAdditionButton = useCallback(() => {
     props.setCardsInputValue((cardsState) => {
       const idolData = getIdolDataByConstId(props.idolDataIdInputValue);
@@ -185,12 +190,12 @@ const CardManagerRaw: React.FC<Props> = (props) => {
       (isDeckOrderFixedState) => !isDeckOrderFixedState,
     );
   }, []);
-  const handleChangeCombobox = (value: CardDataId | null) => {
+  const handleChangeCombobox = useCallback((value: CardDataId | null) => {
     setSelectedCardId(value);
     if (value !== null) {
-      props.setCardsInputValue((cards) => {
+      props.setCardsInputValue((cardsState) => {
         return [
-          ...cards,
+          ...cardsState,
           {
             id: value,
             enhanced: false,
@@ -198,7 +203,7 @@ const CardManagerRaw: React.FC<Props> = (props) => {
         ];
       });
     }
-  };
+  }, []);
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
     if (over) {
@@ -244,9 +249,9 @@ const CardManagerRaw: React.FC<Props> = (props) => {
     });
   }, []);
   return (
-    <div>
-      <ul className="mt-1 flex items-center gap-1 text-sm">
-        <li className="">
+    <div className="mt-1 flex flex-col gap-1">
+      <ul className="flex items-center gap-1 text-sm">
+        <li>
           <Button
             className="border"
             onClick={handleClickIdolSpecificCardAdditionButton}
@@ -254,7 +259,7 @@ const CardManagerRaw: React.FC<Props> = (props) => {
             固有追加
           </Button>
         </li>
-        <li className="">
+        <li>
           <Button
             className="border"
             onClick={handleClickDefaultCardSetAdditionButton}
@@ -262,11 +267,11 @@ const CardManagerRaw: React.FC<Props> = (props) => {
             初期セット追加
           </Button>
         </li>
-        <li className="" onClick={handleClickClearingCardsButton}>
+        <li onClick={handleClickClearingCardsButton}>
           <Button className="border">クリア</Button>
         </li>
       </ul>
-      <ul className="mt-1 flex items-center gap-1">
+      <ul className="flex items-center gap-0.5">
         <li className="flex-1">
           <Combobox
             value={selectedCardId}
@@ -277,7 +282,7 @@ const CardManagerRaw: React.FC<Props> = (props) => {
               aria-label="Assignee"
               autoComplete="off"
               className="w-full text-sm border"
-              placeholder="名前か読みのローマ字で検索"
+              placeholder="名前か読みをローマ字で検索"
               displayValue={() => ""}
               onChange={(event) => setQuery(event.target.value)}
             />
@@ -285,7 +290,7 @@ const CardManagerRaw: React.FC<Props> = (props) => {
               anchor="bottom"
               className="border empty:invisible bg-white"
             >
-              {filterdCards.map((card) => (
+              {filteredCards.map((card) => (
                 <ComboboxOption
                   key={card.id}
                   value={card.id}
@@ -297,7 +302,7 @@ const CardManagerRaw: React.FC<Props> = (props) => {
             </ComboboxOptions>
           </Combobox>
         </li>
-        <li className="text-sm">
+        <li>
           <input
             type="checkbox"
             checked={isProducePlanMatched}
@@ -312,6 +317,8 @@ const CardManagerRaw: React.FC<Props> = (props) => {
           >
             プラン一致
           </label>
+        </li>
+        <li>
           <input
             type="checkbox"
             checked={doesExcludeIdolSpecific}
@@ -328,7 +335,7 @@ const CardManagerRaw: React.FC<Props> = (props) => {
           </label>
         </li>
       </ul>
-      <ul className="mt-1 flex flex-col gap-1 text-xs">
+      <ul className="flex flex-col gap-0.5 text-xs">
         <li>
           <input
             type="checkbox"
@@ -347,7 +354,7 @@ const CardManagerRaw: React.FC<Props> = (props) => {
         </li>
       </ul>
       <DndContext onDragEnd={handleDragEnd}>
-        <ul className="mt-1 flex-col gap-1">
+        <ul>
           {props.cardsInputValue.map((cardInputValue, index) => {
             const card = getCardDataById(cardInputValue.id);
             // TODO: card生成もname生成もcore側のメソッドを使う、まだexportしてない
