@@ -211,6 +211,11 @@ const LessonPageContentRaw: React.FC<Props> = (props) => {
         <SkipButton {...skipButton} />
       </div>
       {cardPlayPreview && <CardPlayPreview {...cardPlayPreview} />}
+      {nextPhase === "lessonEnd" && (
+        <div className="absolute w-full top-[330px] text-lg text-center text-slate-500">
+          レッスン終了
+        </div>
+      )}
     </PageContent>
   );
 };
