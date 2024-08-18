@@ -277,7 +277,7 @@ const CardManagerRaw: React.FC<Props> = (props) => {
               aria-label="Assignee"
               autoComplete="off"
               className="w-full text-sm border"
-              placeholder="名前か読みのローマ字で検索"
+              placeholder="名前か読みをローマ字で検索"
               displayValue={() => ""}
               onChange={(event) => setQuery(event.target.value)}
             />
