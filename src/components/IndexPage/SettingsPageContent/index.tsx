@@ -18,6 +18,7 @@ import { IdolSelect } from "./IdolSelect";
 import { ImportDataButton } from "./ImportDataButton";
 import { LifeInput } from "./LifeInput";
 import { MaxLifeInput } from "./MaxLifeInput";
+import { ProducerItemManager } from "./ProducerItemManager";
 import { ResetSettingsButton } from "./ResetSettingsButton";
 import { ScoreBonusInputSet } from "./ScoreBonusInputSet";
 import { SpecialTrainingLevelSelect } from "./SpecialTrainingLevelSelect";
@@ -33,6 +34,9 @@ type IdolSelectProps = React.ComponentProps<typeof IdolSelect>;
 type ImportDataButtonProps = React.ComponentProps<typeof ImportDataButton>;
 type LifeInputProps = React.ComponentProps<typeof LifeInput>;
 type MaxLifeInputProps = React.ComponentProps<typeof MaxLifeInput>;
+type ProducerItemManagerProps = React.ComponentProps<
+  typeof ProducerItemManager
+>;
 type ResetSettingsButtonProps = React.ComponentProps<
   typeof ResetSettingsButton
 >;
@@ -69,6 +73,7 @@ type Props = {
   importDataButton: ImportDataButtonProps;
   lifeInput: LifeInputProps;
   maxLifeInput: MaxLifeInputProps;
+  producerItemManager: ProducerItemManagerProps;
   resetSettingsButtonProps: ResetSettingsButtonProps;
   scoreBonusInputSet: ScoreBonusInputSetProps;
   specialTrainingLevelSelect: SpecialTrainingLevelSelectProps;
@@ -147,7 +152,7 @@ const SettingsPageContentRaw: React.FC<Props> = (props) => {
             <CardManager {...props.cardManager} />
           </TabPanelOnPageContent>
           <TabPanelOnPageContent>
-            Pアイテム検索＆追加＆削除・固有追加
+            <ProducerItemManager {...props.producerItemManager} />
           </TabPanelOnPageContent>
           <TabPanelOnPageContent>
             Pドリンク検索＆追加＆削除
