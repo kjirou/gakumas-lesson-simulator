@@ -1,19 +1,21 @@
 import { Select } from "@headlessui/react";
 import React from "react";
-import { specialTrainingLevelSelectOptions } from "../utils";
+import {
+  SettingInputValues,
+  SettingInputValueSetters,
+  specialTrainingLevelSelectOptions,
+} from "../utils";
 
 type Props = {
-  setSpecialTrainingLevelInputValue: (
-    state: (typeof specialTrainingLevelSelectOptions)[number],
-  ) => void;
-  specialTrainingLevelInputValue: (typeof specialTrainingLevelSelectOptions)[number];
+  setSpecialTrainingLevelInputValue: SettingInputValueSetters["setSpecialTrainingLevelInputValue"];
+  specialTrainingLevelInputValue: SettingInputValues["specialTrainingLevelInputValue"];
 };
 
 const SpecialTrainingLevelSelectRaw: React.FC<Props> = (props) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     props.setSpecialTrainingLevelInputValue(
       event.currentTarget
-        .value as (typeof specialTrainingLevelSelectOptions)[number],
+        .value as SettingInputValues["specialTrainingLevelInputValue"],
     );
   };
   return (

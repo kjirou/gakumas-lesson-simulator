@@ -3,9 +3,9 @@ import React from "react";
 import { SettingInputValues, SettingInputValueSetters } from "../utils";
 
 type Props = {
-  isScoreBonusEnabledInputValue: boolean;
+  isScoreBonusEnabledInputValue: SettingInputValues["isScoreBonusEnabledInputValue"];
   scoreBonusInputValueSet: SettingInputValues["scoreBonusInputValueSet"];
-  setIsScoreBonusEnabledInputValue: (state: boolean) => void;
+  setIsScoreBonusEnabledInputValue: SettingInputValueSetters["setIsScoreBonusEnabledInputValue"];
   setScoreBonusInputValueSet: SettingInputValueSetters["setScoreBonusInputValueSet"];
 };
 

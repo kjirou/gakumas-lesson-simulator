@@ -1,9 +1,10 @@
 import { Input } from "@headlessui/react";
 import React from "react";
+import { SettingInputValues, SettingInputValueSetters } from "../utils";
 
 type Props = {
-  maxLifeInputValue: string;
-  setMaxLifeInputValue: (state: string) => void;
+  maxLifeInputValue: SettingInputValues["maxLifeInputValue"];
+  setMaxLifeInputValue: SettingInputValueSetters["setMaxLifeInputValue"];
 };
 
 const MaxLifeInputRaw: React.FC<Props> = (props) => {
