@@ -357,7 +357,7 @@ const CardManagerRaw: React.FC<Props> = (props) => {
         <ul>
           {props.cardsInputValue.map((cardInputValue, index) => {
             const card = getCardDataById(cardInputValue.id);
-            // TODO: card生成もname生成もcore側のメソッドを使う、まだexportしてない
+            // TODO: card生成もname生成もcore側のメソッドを使う、コア側のメソッドを調整してから
             const name = card.name + (cardInputValue.enhanced ? "+" : "");
             return (
               <CardListItem
