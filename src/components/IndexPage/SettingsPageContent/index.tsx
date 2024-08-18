@@ -90,7 +90,6 @@ const SettingsPageContentRaw: React.FC<Props> = (props) => {
         <TabPanels>
           <TabPanelOnPageContent>
             <Fieldset className="space-y-1">
-              <Legend className="text-lg font-bold">基本設定</Legend>
               <Field>
                 <Label className="block text-sm">アイドル:</Label>
                 <div>
