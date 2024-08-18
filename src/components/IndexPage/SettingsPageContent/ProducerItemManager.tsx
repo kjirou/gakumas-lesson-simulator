@@ -197,7 +197,7 @@ const ProducerItemManagerRaw: React.FC<Props> = (props) => {
           const producerItemData = getProducerItemDataById(
             producerItemInputValue.id,
           );
-          // TODO: producerItem生成もname生成もcore側のメソッドを使う、まだexportしてない
+          // TODO: producerItem生成もname生成もcore側のメソッドを使う、コア側のメソッドを調整してから
           const name =
             producerItemData.name +
             (producerItemInputValue.enhanced ? "+" : "");
