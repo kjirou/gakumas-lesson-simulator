@@ -214,34 +214,36 @@ export type SettingInputValueSetters = {
   setCardsInputValue: React.Dispatch<
     React.SetStateAction<SettingInputValues["cardsInputValue"]>
   >;
-  setClearScoreInputValue: (
-    value: SettingInputValues["clearScoreInputValue"],
-  ) => void;
-  setIdolDataIdInputValue: (
-    value: SettingInputValues["idolDataIdInputValue"],
-  ) => void;
+  setClearScoreInputValue: React.Dispatch<
+    React.SetStateAction<SettingInputValues["clearScoreInputValue"]>
+  >;
+  setIdolDataIdInputValue: React.Dispatch<
+    React.SetStateAction<SettingInputValues["idolDataIdInputValue"]>
+  >;
   setIsDeckOrderFixedInputValue: React.Dispatch<
     React.SetStateAction<SettingInputValues["isDeckOrderFixedInputValue"]>
   >;
-  setIsScoreBonusEnabledInputValue: (
-    value: SettingInputValues["isScoreBonusEnabledInputValue"],
-  ) => void;
-  setLifeInputValue: (value: SettingInputValues["lifeInputValue"]) => void;
-  setMaxLifeInputValue: (
-    value: SettingInputValues["maxLifeInputValue"],
-  ) => void;
-  setPerfectScoreInputValue: (
-    value: SettingInputValues["perfectScoreInputValue"],
-  ) => void;
-  setScoreBonusInputValueSet: (
-    value: SettingInputValues["scoreBonusInputValueSet"],
-  ) => void;
-  setSpecialTrainingLevelInputValue: (
-    value: SettingInputValues["specialTrainingLevelInputValue"],
-  ) => void;
-  setTalentAwakeningLevelInputValue: (
-    value: SettingInputValues["talentAwakeningLevelInputValue"],
-  ) => void;
+  setIsScoreBonusEnabledInputValue: React.Dispatch<
+    React.SetStateAction<SettingInputValues["isScoreBonusEnabledInputValue"]>
+  >;
+  setLifeInputValue: React.Dispatch<
+    React.SetStateAction<SettingInputValues["lifeInputValue"]>
+  >;
+  setMaxLifeInputValue: React.Dispatch<
+    React.SetStateAction<SettingInputValues["maxLifeInputValue"]>
+  >;
+  setPerfectScoreInputValue: React.Dispatch<
+    React.SetStateAction<SettingInputValues["perfectScoreInputValue"]>
+  >;
+  setScoreBonusInputValueSet: React.Dispatch<
+    React.SetStateAction<SettingInputValues["scoreBonusInputValueSet"]>
+  >;
+  setSpecialTrainingLevelInputValue: React.Dispatch<
+    React.SetStateAction<SettingInputValues["specialTrainingLevelInputValue"]>
+  >;
+  setTalentAwakeningLevelInputValue: React.Dispatch<
+    React.SetStateAction<SettingInputValues["talentAwakeningLevelInputValue"]>
+  >;
   setTurnsInputValue: React.Dispatch<
     React.SetStateAction<SettingInputValues["turnsInputValue"]>
   >;
