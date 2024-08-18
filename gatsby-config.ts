@@ -1,4 +1,5 @@
 import type { GatsbyConfig } from "gatsby";
+import adapter from "gatsby-adapter-netlify";
 
 const config: GatsbyConfig = {
   siteMetadata: {
@@ -10,6 +11,7 @@ const config: GatsbyConfig = {
   // Learn more at: https://gatsby.dev/graphql-typegen
   graphqlTypegen: true,
   plugins: ["gatsby-plugin-postcss"],
+  adapter: adapter(),
 };
 
 export default config;
