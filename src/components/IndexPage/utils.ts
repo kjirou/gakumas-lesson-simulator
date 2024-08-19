@@ -4,7 +4,9 @@
 
 import {
   ActionCost,
+  CardData,
   CardEffectDisplay,
+  CardSummaryKind,
   CharacterData,
   CharacterDataId,
   GamePlay,
@@ -71,6 +73,36 @@ export const actionCostKindToText = (kind: ActionCost["kind"]): string => {
       return "通常コスト";
     case "positiveImpression":
       return "好印象";
+    default:
+      const unreachable: never = kind;
+      throw new Error("Unreachable statement");
+  }
+};
+
+export const cardPossessionKindToText = (
+  kind: CardData["cardPossessionKind"],
+): string => {
+  switch (kind) {
+    case "free":
+      return "フリー";
+    case "logic":
+      return "ロジック";
+    case "sense":
+      return "センス";
+    default:
+      const unreachable: never = kind;
+      throw new Error("Unreachable statement");
+  }
+};
+
+export const cardSummaryKindToText = (kind: CardSummaryKind): string => {
+  switch (kind) {
+    case "active":
+      return "アクティブ";
+    case "mental":
+      return "メンタル";
+    case "trouble":
+      return "トラブル";
     default:
       const unreachable: never = kind;
       throw new Error("Unreachable statement");
