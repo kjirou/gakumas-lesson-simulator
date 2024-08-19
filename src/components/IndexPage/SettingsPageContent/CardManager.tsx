@@ -12,8 +12,14 @@ import {
   ComboboxOptions,
 } from "@headlessui/react";
 import {
+  Card,
+  CardData,
   CardDataId,
   cards,
+  generateCardDescription,
+  generateCardName,
+  getCardContentData,
+  getCardContentDataList,
   getCardDataById,
   getDefaultCardSetData,
   getIdolDataByConstId,
@@ -22,8 +28,12 @@ import React, { useCallback, useMemo, useState } from "react";
 import {
   SettingInputValues,
   SettingInputValueSetters,
+  actionCostKindToText,
+  cardPossessionKindToText,
+  cardSummaryKindToText,
   canCardBeEnhancedWithSpecialTrainingLevel,
 } from "../utils";
+import { DescriptionDialog } from "./DescriptionDialog";
 
 const createDndId = (index: number) =>
   `cardManagerCardListItem-${index}` as const;
@@ -32,6 +42,50 @@ const parseDndId = (dndId: ReturnType<typeof createDndId>): number => {
   const tokens = dndId.split("-");
   return Number(tokens[1]);
 };
+
+const CardDescriptionDialogRaw: React.FC<{
+  data: CardData;
+  enhanced: boolean;
+  onClickBackdrop: Parameters<typeof DescriptionDialog>[0]["onClickBackdrop"];
+}> = (props) => {
+  const card: Card = {
+    id: "",
+    data: props.data,
+    enhancements: props.enhanced ? [{ kind: "original" }] : [],
+  };
+  const cardContent = getCardContentData(card);
+  const description = generateCardDescription({
+    cost: cardContent.cost,
+    condition: cardContent.condition,
+    effects: cardContent.effects,
+    innate: cardContent.innate,
+    nonDuplicative: props.data.nonDuplicative,
+    usableOncePerLesson: cardContent.usableOncePerLesson,
+  });
+  return (
+    <DescriptionDialog onClickBackdrop={props.onClickBackdrop}>
+      <ul className="flex flex-col">
+        <li>{generateCardName(card)}</li>
+        <li>
+          <span>{cardPossessionKindToText(props.data.cardPossessionKind)}</span>
+          <span className="pl-1 pr-1">/</span>
+          <span>{cardSummaryKindToText(props.data.cardSummaryKind)}</span>
+        </li>
+        <li className="text-red-500">
+          <span>{actionCostKindToText(cardContent.cost.kind)}:</span>
+          <span className="ml-1">{cardContent.cost.value}</span>
+        </li>
+        <li className="p-1">
+          {description.split("\n").map((line, i) => (
+            <p key={i}>{line}</p>
+          ))}
+        </li>
+      </ul>
+    </DescriptionDialog>
+  );
+};
+
+const CardDescriptionDialog = React.memo(CardDescriptionDialogRaw);
 
 const CardListItemRaw: React.FC<{
   cardName: string;
@@ -159,6 +213,21 @@ const CardManagerRaw: React.FC<Props> = (props) => {
     query,
     props.idolDataIdInputValue,
   ]);
+  const [shownCardDescription, setShownCardDescription] = useState<
+    { data: CardData; enhanced: boolean } | undefined
+  >(undefined);
+  const cardDescriptionDialogProps = useMemo<
+    React.ComponentProps<typeof CardDescriptionDialog> | undefined
+  >(() => {
+    return shownCardDescription
+      ? {
+          ...shownCardDescription,
+          onClickBackdrop: () => {
+            setShownCardDescription(undefined);
+          },
+        }
+      : undefined;
+  }, [shownCardDescription]);
   const handleClickIdolSpecificCardAdditionButton = useCallback(() => {
     props.setCardsInputValue((cardsState) => {
       const idolData = getIdolDataByConstId(props.idolDataIdInputValue);
@@ -217,9 +286,17 @@ const CardManagerRaw: React.FC<Props> = (props) => {
       });
     }
   }, []);
-  const handleClickCardName = useCallback((index: number) => {
-    window.alert("TODO:スキルカード説明！");
-  }, []);
+  const handleClickCardName = useCallback(
+    (index: number) => {
+      const cardInputValue = props.cardsInputValue[index];
+      const cardData = getCardDataById(cardInputValue.id);
+      setShownCardDescription({
+        data: cardData,
+        enhanced: cardInputValue.enhanced ?? false,
+      });
+    },
+    [props.cardsInputValue],
+  );
   const handeClickCardEnhanceButton = useCallback((index: number) => {
     props.setCardsInputValue((cardsState) => {
       return cardsState.map((card, i) => {
@@ -249,131 +326,139 @@ const CardManagerRaw: React.FC<Props> = (props) => {
     });
   }, []);
   return (
-    <div className="mt-1 flex flex-col gap-1">
-      <ul className="flex items-center gap-1 text-sm">
-        <li>
-          <Button
-            className="border"
-            onClick={handleClickIdolSpecificCardAdditionButton}
-          >
-            固有追加
-          </Button>
-        </li>
-        <li>
-          <Button
-            className="border"
-            onClick={handleClickDefaultCardSetAdditionButton}
-          >
-            初期セット追加
-          </Button>
-        </li>
-        <li onClick={handleClickClearingCardsButton}>
-          <Button className="border">クリア</Button>
-        </li>
-      </ul>
-      <ul className="flex items-center gap-0.5">
-        <li className="flex-1">
-          <Combobox
-            value={selectedCardId}
-            onChange={handleChangeCombobox}
-            onClose={() => setQuery("")}
-          >
-            <ComboboxInput
-              aria-label="Assignee"
-              autoComplete="off"
-              className="w-full text-sm border"
-              placeholder="名前か読みをローマ字で検索"
-              displayValue={() => ""}
-              onChange={(event) => setQuery(event.target.value)}
-            />
-            <ComboboxOptions
-              anchor="bottom"
-              className="border empty:invisible bg-white"
+    <>
+      <div className="mt-1 flex flex-col gap-1">
+        <ul className="flex items-center gap-1 text-sm">
+          <li>
+            <Button
+              className="border"
+              onClick={handleClickIdolSpecificCardAdditionButton}
             >
-              {filteredCards.map((card) => (
-                <ComboboxOption
-                  key={card.id}
-                  value={card.id}
-                  className="text-sm data-[focus]:bg-blue-100"
-                >
-                  {card.name}
-                </ComboboxOption>
-              ))}
-            </ComboboxOptions>
-          </Combobox>
-        </li>
-        <li>
-          <input
-            type="checkbox"
-            checked={isProducePlanMatched}
-            id="cardManagerIsSameProducePlan"
-            onChange={() => {
-              setIsProducePlanMatched(!isProducePlanMatched);
-            }}
-          />
-          <label
-            className="text-xs select-none"
-            htmlFor="cardManagerIsSameProducePlan"
-          >
-            プラン一致
-          </label>
-        </li>
-        <li>
-          <input
-            type="checkbox"
-            checked={doesExcludeIdolSpecific}
-            id="cardManagerDoesExcludeIdolSpecific"
-            onChange={() => {
-              setDoesExcludeIdolSpecific(!doesExcludeIdolSpecific);
-            }}
-          />
-          <label
-            className="text-xs select-none"
-            htmlFor="cardManagerDoesExcludeIdolSpecific"
-          >
-            固有除外
-          </label>
-        </li>
-      </ul>
-      <ul className="flex flex-col gap-0.5 text-xs">
-        <li>
-          <input
-            type="checkbox"
-            checked={props.isDeckOrderFixedInputValue}
-            id="cardManagerIsDeckOrderFixed"
-            onChange={() => {
-              handleOnClickIsDeckOrderFixedButton();
-            }}
-          />
-          <label className="select-none" htmlFor="cardManagerIsDeckOrderFixed">
-            並び順にスキルカードを引く
-          </label>
-        </li>
-        <li className="text-slate-500">
-          並び替えは番号部分をドラッグ＆ドロップ
-        </li>
-      </ul>
-      <DndContext onDragEnd={handleDragEnd}>
-        <ul>
-          {props.cardsInputValue.map((cardInputValue, index) => {
-            const card = getCardDataById(cardInputValue.id);
-            // TODO: card生成もname生成もcore側のメソッドを使う、コア側のメソッドを調整してから
-            const name = card.name + (cardInputValue.enhanced ? "+" : "");
-            return (
-              <CardListItem
-                key={index}
-                cardName={name}
-                listItemIndex={index}
-                onClickCardCopyButton={handeClickCardCopyButton}
-                onClickCardEnhanceButton={handeClickCardEnhanceButton}
-                onClickCardName={handleClickCardName}
-                onClickCardRemovalButton={handeClickCardRemovalButton}
-              />
-            );
-          })}
+              固有追加
+            </Button>
+          </li>
+          <li>
+            <Button
+              className="border"
+              onClick={handleClickDefaultCardSetAdditionButton}
+            >
+              初期セット追加
+            </Button>
+          </li>
+          <li onClick={handleClickClearingCardsButton}>
+            <Button className="border">クリア</Button>
+          </li>
         </ul>
-      </DndContext>
-    </div>
+        <ul className="flex items-center gap-0.5">
+          <li className="flex-1">
+            <Combobox
+              value={selectedCardId}
+              onChange={handleChangeCombobox}
+              onClose={() => setQuery("")}
+            >
+              <ComboboxInput
+                aria-label="Assignee"
+                autoComplete="off"
+                className="w-full text-sm border"
+                placeholder="名前か読みをローマ字で検索"
+                displayValue={() => ""}
+                onChange={(event) => setQuery(event.target.value)}
+              />
+              <ComboboxOptions
+                anchor="bottom"
+                className="border empty:invisible bg-white"
+              >
+                {filteredCards.map((card) => (
+                  <ComboboxOption
+                    key={card.id}
+                    value={card.id}
+                    className="text-sm data-[focus]:bg-blue-100"
+                  >
+                    {card.name}
+                  </ComboboxOption>
+                ))}
+              </ComboboxOptions>
+            </Combobox>
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              checked={isProducePlanMatched}
+              id="cardManagerIsSameProducePlan"
+              onChange={() => {
+                setIsProducePlanMatched(!isProducePlanMatched);
+              }}
+            />
+            <label
+              className="text-xs select-none"
+              htmlFor="cardManagerIsSameProducePlan"
+            >
+              プラン一致
+            </label>
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              checked={doesExcludeIdolSpecific}
+              id="cardManagerDoesExcludeIdolSpecific"
+              onChange={() => {
+                setDoesExcludeIdolSpecific(!doesExcludeIdolSpecific);
+              }}
+            />
+            <label
+              className="text-xs select-none"
+              htmlFor="cardManagerDoesExcludeIdolSpecific"
+            >
+              固有除外
+            </label>
+          </li>
+        </ul>
+        <ul className="flex flex-col gap-0.5 text-xs">
+          <li>
+            <input
+              type="checkbox"
+              checked={props.isDeckOrderFixedInputValue}
+              id="cardManagerIsDeckOrderFixed"
+              onChange={() => {
+                handleOnClickIsDeckOrderFixedButton();
+              }}
+            />
+            <label
+              className="select-none"
+              htmlFor="cardManagerIsDeckOrderFixed"
+            >
+              並び順にスキルカードを引く
+            </label>
+          </li>
+          <li className="text-slate-500">
+            並び替えは番号部分をドラッグ＆ドロップ
+          </li>
+        </ul>
+        <DndContext onDragEnd={handleDragEnd}>
+          <ul>
+            {props.cardsInputValue.map((cardInputValue, index) => {
+              const card = getCardDataById(cardInputValue.id);
+              // TODO: card生成もname生成もcore側のメソッドを使う、コア側のメソッドを調整してから
+              const name = card.name + (cardInputValue.enhanced ? "+" : "");
+              return (
+                <CardListItem
+                  key={index}
+                  cardName={name}
+                  listItemIndex={index}
+                  onClickCardCopyButton={handeClickCardCopyButton}
+                  onClickCardEnhanceButton={handeClickCardEnhanceButton}
+                  onClickCardName={handleClickCardName}
+                  onClickCardRemovalButton={handeClickCardRemovalButton}
+                />
+              );
+            })}
+          </ul>
+        </DndContext>
+      </div>
+      {cardDescriptionDialogProps && (
+        <CardDescriptionDialog {...cardDescriptionDialogProps} />
+      )}
+    </>
   );
 };
 
