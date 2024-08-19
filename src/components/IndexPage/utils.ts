@@ -16,6 +16,7 @@ import {
   IdolParameterKind,
   Lesson,
   ModifierDisplay,
+  ProducerItemData,
   getCharacterDataById,
   getIdolParameterKindOnTurn,
   getLesson,
@@ -103,6 +104,22 @@ export const cardSummaryKindToText = (kind: CardSummaryKind): string => {
       return "メンタル";
     case "trouble":
       return "トラブル";
+    default:
+      const unreachable: never = kind;
+      throw new Error("Unreachable statement");
+  }
+};
+
+export const producerItemPossessionKindToText = (
+  kind: ProducerItemData["producerItemPossessionKind"],
+): string => {
+  switch (kind) {
+    case "free":
+      return "フリー";
+    case "logic":
+      return "ロジック";
+    case "sense":
+      return "センス";
     default:
       const unreachable: never = kind;
       throw new Error("Unreachable statement");
