@@ -10,6 +10,7 @@ import {
   getProducerItemDataById,
   getIdolDataByConstId,
   producerItems,
+  ProducerItemData,
 } from "gakumas-core";
 import React, { useCallback, useMemo, useState } from "react";
 import {
@@ -17,6 +18,7 @@ import {
   SettingInputValueSetters,
   canProducerItemBeEnhancedWithTalentAwakeningLevel,
 } from "../utils";
+import { ProducerItemDescriptionDialog } from "./ProducerItemDescriptionDialog";
 
 type Props = {
   producerItemsInputValue: SettingInputValues["producerItemsInputValue"];
@@ -59,6 +61,22 @@ const ProducerItemManagerRaw: React.FC<Props> = (props) => {
     query,
     props.idolDataIdInputValue,
   ]);
+  const [shownProducerItemDescription, setShownProducerItemDescription] =
+    useState<{ data: ProducerItemData; enhanced: boolean } | undefined>(
+      undefined,
+    );
+  const producerItemDescriptionDialogProps = useMemo<
+    React.ComponentProps<typeof ProducerItemDescriptionDialog> | undefined
+  >(() => {
+    return shownProducerItemDescription
+      ? {
+          ...shownProducerItemDescription,
+          onClickBackdrop: () => {
+            setShownProducerItemDescription(undefined);
+          },
+        }
+      : undefined;
+  }, [shownProducerItemDescription]);
   const handleClickIdolSpecificProducerItemAdditionButton = useCallback(() => {
     props.setProducerItemsInputValue((producerItemsState) => {
       const idolData = getIdolDataByConstId(props.idolDataIdInputValue);
@@ -91,9 +109,19 @@ const ProducerItemManagerRaw: React.FC<Props> = (props) => {
     },
     [],
   );
-  const handleClickProducerItemName = useCallback((index: number) => {
-    window.alert("TODO:Pアイテム説明！");
-  }, []);
+  const handleClickProducerItemName = useCallback(
+    (index: number) => {
+      const producerItemInputValue = props.producerItemsInputValue[index];
+      const producerItemData = getProducerItemDataById(
+        producerItemInputValue.id,
+      );
+      setShownProducerItemDescription({
+        data: producerItemData,
+        enhanced: producerItemInputValue.enhanced ?? false,
+      });
+    },
+    [props.producerItemsInputValue],
+  );
   const handeClickProducerItemEnhanceButton = useCallback((index: number) => {
     props.setProducerItemsInputValue((producerItemsState) => {
       return producerItemsState.map((producerItem, i) => {
@@ -114,132 +142,141 @@ const ProducerItemManagerRaw: React.FC<Props> = (props) => {
     });
   }, []);
   return (
-    <div className="mt-1 flex flex-col gap-1">
-      <ul className="flex items-center gap-1 text-sm">
-        <li>
-          <Button
-            className="border select-none"
-            onClick={handleClickIdolSpecificProducerItemAdditionButton}
-          >
-            固有追加
-          </Button>
-        </li>
-        <li onClick={handleClickClearingProducerItemsButton}>
-          <Button className="border select-none">クリア</Button>
-        </li>
-      </ul>
-      <ul className="flex items-center gap-0.5">
-        <li className="flex-1">
-          <Combobox
-            value={selectedProducerItemId}
-            onChange={handleChangeCombobox}
-            onClose={() => setQuery("")}
-          >
-            <ComboboxInput
-              aria-label="Assignee"
-              autoComplete="off"
-              className="w-full text-sm border"
-              placeholder="名前か読みをローマ字で検索"
-              displayValue={() => ""}
-              onChange={(event) => setQuery(event.target.value)}
-            />
-            <ComboboxOptions
-              anchor="bottom"
-              className="border empty:invisible bg-white"
+    <>
+      <div className="mt-1 flex flex-col gap-1">
+        <ul className="flex items-center gap-1 text-sm">
+          <li>
+            <Button
+              className="border select-none"
+              onClick={handleClickIdolSpecificProducerItemAdditionButton}
             >
-              {filteredProducerItems.map((producerItem) => (
-                <ComboboxOption
-                  key={producerItem.id}
-                  value={producerItem.id}
-                  className="text-sm data-[focus]:bg-blue-100"
-                >
-                  {producerItem.name}
-                </ComboboxOption>
-              ))}
-            </ComboboxOptions>
-          </Combobox>
-        </li>
-        <li>
-          <input
-            type="checkbox"
-            checked={isProducePlanMatched}
-            id="producerItemManagerIsProducePlanMatched"
-            onChange={() => {
-              setIsProducePlanMatched((s) => !s);
-            }}
-          />
-          <label
-            className="text-xs select-none"
-            htmlFor="producerItemManagerIsProducePlanMatched"
-          >
-            プラン一致
-          </label>
-        </li>
-        <li>
-          <input
-            type="checkbox"
-            checked={doesExcludeIdolSpecific}
-            id="producerItemManagerDoesExcludeIdolSpecific"
-            onChange={() => {
-              setDoesExcludeIdolSpecific((s) => !s);
-            }}
-          />
-          <label
-            className="text-xs select-none"
-            htmlFor="producerItemManagerDoesExcludeIdolSpecific"
-          >
-            固有除外
-          </label>
-        </li>
-      </ul>
-      <ul>
-        {props.producerItemsInputValue.map((producerItemInputValue, index) => {
-          const producerItemData = getProducerItemDataById(
-            producerItemInputValue.id,
-          );
-          // TODO: producerItem生成もname生成もcore側のメソッドを使う、コア側のメソッドを調整してから
-          const name =
-            producerItemData.name +
-            (producerItemInputValue.enhanced ? "+" : "");
-          const canBeEnhanced = producerItemData.enhanced;
-          return (
-            <li key={index} className="text-xs flex items-center border">
-              <div className="w-1/12">{index + 1}</div>
-              <div
-                className="flex-1 cursor-pointer"
-                onClick={() => {
-                  handleClickProducerItemName(index);
-                }}
+              固有追加
+            </Button>
+          </li>
+          <li onClick={handleClickClearingProducerItemsButton}>
+            <Button className="border select-none">クリア</Button>
+          </li>
+        </ul>
+        <ul className="flex items-center gap-0.5">
+          <li className="flex-1">
+            <Combobox
+              value={selectedProducerItemId}
+              onChange={handleChangeCombobox}
+              onClose={() => setQuery("")}
+            >
+              <ComboboxInput
+                aria-label="Assignee"
+                autoComplete="off"
+                className="w-full text-sm border"
+                placeholder="名前か読みをローマ字で検索"
+                displayValue={() => ""}
+                onChange={(event) => setQuery(event.target.value)}
+              />
+              <ComboboxOptions
+                anchor="bottom"
+                className="border empty:invisible bg-white"
               >
-                {name}
-              </div>
-              <div className="w-4/12 flex gap-0.5">
-                <Button
-                  className={
-                    "border select-none " +
-                    (canBeEnhanced ? "" : "text-slate-300")
-                  }
-                  disabled={!canBeEnhanced}
-                  onClick={() => {
-                    handeClickProducerItemEnhanceButton(index);
-                  }}
-                >
-                  強化
-                </Button>
-                <Button
-                  className="border select-none"
-                  onClick={() => {
-                    handeClickProducerItemRemovalButton(index);
-                  }}
-                >
-                  削除
-                </Button>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+                {filteredProducerItems.map((producerItem) => (
+                  <ComboboxOption
+                    key={producerItem.id}
+                    value={producerItem.id}
+                    className="text-sm data-[focus]:bg-blue-100"
+                  >
+                    {producerItem.name}
+                  </ComboboxOption>
+                ))}
+              </ComboboxOptions>
+            </Combobox>
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              checked={isProducePlanMatched}
+              id="producerItemManagerIsProducePlanMatched"
+              onChange={() => {
+                setIsProducePlanMatched((s) => !s);
+              }}
+            />
+            <label
+              className="text-xs select-none"
+              htmlFor="producerItemManagerIsProducePlanMatched"
+            >
+              プラン一致
+            </label>
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              checked={doesExcludeIdolSpecific}
+              id="producerItemManagerDoesExcludeIdolSpecific"
+              onChange={() => {
+                setDoesExcludeIdolSpecific((s) => !s);
+              }}
+            />
+            <label
+              className="text-xs select-none"
+              htmlFor="producerItemManagerDoesExcludeIdolSpecific"
+            >
+              固有除外
+            </label>
+          </li>
+        </ul>
+        <ul>
+          {props.producerItemsInputValue.map(
+            (producerItemInputValue, index) => {
+              const producerItemData = getProducerItemDataById(
+                producerItemInputValue.id,
+              );
+              // TODO: producerItem生成もname生成もcore側のメソッドを使う、コア側のメソッドを調整してから
+              const name =
+                producerItemData.name +
+                (producerItemInputValue.enhanced ? "+" : "");
+              const canBeEnhanced = producerItemData.enhanced;
+              return (
+                <li key={index} className="text-xs flex items-center border">
+                  <div className="w-1/12">{index + 1}</div>
+                  <div
+                    className="flex-1 cursor-pointer"
+                    onClick={() => {
+                      handleClickProducerItemName(index);
+                    }}
+                  >
+                    {name}
+                  </div>
+                  <div className="w-4/12 flex gap-0.5">
+                    <Button
+                      className={
+                        "border select-none " +
+                        (canBeEnhanced ? "" : "text-slate-300")
+                      }
+                      disabled={!canBeEnhanced}
+                      onClick={() => {
+                        handeClickProducerItemEnhanceButton(index);
+                      }}
+                    >
+                      強化
+                    </Button>
+                    <Button
+                      className="border select-none"
+                      onClick={() => {
+                        handeClickProducerItemRemovalButton(index);
+                      }}
+                    >
+                      削除
+                    </Button>
+                  </div>
+                </li>
+              );
+            },
+          )}
+        </ul>
+      </div>
+      {producerItemDescriptionDialogProps && (
+        <ProducerItemDescriptionDialog
+          {...producerItemDescriptionDialogProps}
+        />
+      )}
+    </>
   );
 };
 

@@ -45,12 +45,13 @@ const CardDescriptionDialogRaw: React.FC<{
           <span>{actionCostKindToText(cardContent.cost.kind)}:</span>
           <span className="ml-1">{cardContent.cost.value}</span>
         </li>
-        <li className="p-1">
-          {description.split("\n").map((line, i) => (
-            <p key={i}>{line}</p>
-          ))}
-        </li>
       </ul>
+      <hr />
+      <div>
+        {description.split("\n").map((line, i) => (
+          <p key={i}>{line}</p>
+        ))}
+      </div>
     </DescriptionDialog>
   );
 };
