@@ -23,7 +23,10 @@ import {
   hasActionEnded,
   idols,
   initializeGamePlay,
+  isCardDataIdType,
+  isIdolDataIdType,
   isLessonEnded,
+  isProducerItemDataIdType,
 } from "gakumas-core";
 
 export const idolParameterKindToText = (kind: IdolParameterKind): string => {
@@ -336,6 +339,72 @@ export type SavedDataManager = {
   isLoading: boolean;
   savedData: SavedData;
   setImportedJson: (state: string) => void;
+};
+
+/**
+ * 再帰的に、target に self のプロパティがない時は self の値をコピーし、また target に self にないプロパティがあれば削除する
+ *
+ * - 存否判定で埋めることしかしていないので、プロパティの型が異なる時は判別できない
+ * - 配列を含む場合、そこから処理をしない
+ */
+export const tailorTargetToSelf = (
+  self: { [k in string]: any },
+  target: { [k in string]: any },
+) => {
+  const newData: { [k in string]: any } = {};
+  for (const key in self) {
+    const selfValue = self[key];
+    if (!(key in target)) {
+      newData[key] = selfValue;
+    } else {
+      const targetValue = target[key];
+      if (
+        typeof targetValue === "object" &&
+        !Array.isArray(targetValue) &&
+        targetValue !== null
+      ) {
+        newData[key] = tailorTargetToSelf(selfValue, targetValue);
+      } else {
+        newData[key] = targetValue;
+      }
+    }
+  }
+  return newData;
+};
+
+/**
+ * オブジェクトを強制的に SavedData として解釈して変換する
+ *
+ * - かなり限定的な対応
+ *   - やること
+ *     - 再帰的に値を走査して、 defaultSavedData にあるプロパティを defaultSavedData からコピーする
+ *     - 再帰的に値を走査して、 defaultSavedData にないプロパティを削除する
+ *     - 存在しないIDは、他のIDへ置換したり、無視したりする
+ *   - 例えば対応できないこと
+ *     - 同名プロパティの値が異なる
+ *     - 配列の要素の中のオブジェクトにキー欠落がある
+ * - 網羅的な解決は、どこかでエラーが出たら、UI側でローカルストレージを削除できるようにするという方針
+ */
+export const forceInterpretObjectAsSavedData = (obj: Object): SavedData => {
+  let newSavedData = tailorTargetToSelf(defaultSavedData, obj) as SavedData;
+  if (!isIdolDataIdType(newSavedData.settingInputValues.idolDataIdInputValue)) {
+    newSavedData.settingInputValues.idolDataIdInputValue =
+      defaultSavedData.settingInputValues.idolDataIdInputValue;
+  }
+  newSavedData = {
+    ...newSavedData,
+    settingInputValues: {
+      ...newSavedData.settingInputValues,
+      cardsInputValue: newSavedData.settingInputValues.cardsInputValue.filter(
+        (cardData) => isCardDataIdType(cardData.id),
+      ),
+      producerItemsInputValue:
+        newSavedData.settingInputValues.producerItemsInputValue.filter(
+          (producerItemData) => isProducerItemDataIdType(producerItemData.id),
+        ),
+    },
+  };
+  return newSavedData;
 };
 
 export const canCardBeEnhancedWithSpecialTrainingLevel = (

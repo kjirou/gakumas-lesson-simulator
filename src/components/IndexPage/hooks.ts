@@ -8,6 +8,7 @@ import {
   SettingInputValues,
   SettingInputValueSetters,
   defaultSavedData,
+  forceInterpretObjectAsSavedData,
 } from "./utils";
 
 type Props = React.ComponentProps<typeof IndexPageView>;
@@ -54,7 +55,7 @@ export const useSavedDataManager = (): SavedDataManager => {
         window.alert("セーブデータが壊れていました。");
         return defaultSavedData;
       }
-      return savedDataLike as SavedData;
+      return forceInterpretObjectAsSavedData(savedDataLike);
     }
     return defaultSavedData;
   }, [localStorageJson, importedJson]);
