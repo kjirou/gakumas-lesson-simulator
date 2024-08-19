@@ -13,16 +13,19 @@ export const CardPlayPreview: React.FC<Props> = ({ onClick, preview }) => {
       className="w-[260px] h-[160px] absolute top-[300px] left-[50px] z-10 border bg-white cursor-pointer"
       onClick={onClick}
     >
-      <ul>
-        <li>{preview.card.name}</li>
+      <ul className="flex flex-col">
+        <li className="text-sm">{preview.card.name}</li>
         <li className="text-sm text-red-500">
           {actionCostKindToText(preview.card.cost.kind)}: -
           {preview.card.cost.value}
         </li>
-        <li className="text-xs">
-          <pre className="font-normal">{preview.card.description}</pre>
-        </li>
       </ul>
+      <hr />
+      <div className="text-xs">
+        {preview.card.description.split("\n").map((line, i) => (
+          <p key={i}>{line}</p>
+        ))}
+      </div>
     </div>
   );
 };
