@@ -47,9 +47,14 @@ export const useSavedDataManager = (): SavedDataManager => {
   const savedData = useMemo(() => {
     const rawJson = importedJson || localStorageJson;
     if (rawJson) {
-      // TODO: バリデーションとフォールバック
-      const savedData: SavedData = JSON.parse(rawJson);
-      return savedData;
+      let savedDataLike: any = undefined;
+      try {
+        savedDataLike = JSON.parse(rawJson);
+      } catch (error) {
+        window.alert("セーブデータが壊れていました。");
+        return defaultSavedData;
+      }
+      return savedDataLike as SavedData;
     }
     return defaultSavedData;
   }, [localStorageJson, importedJson]);
