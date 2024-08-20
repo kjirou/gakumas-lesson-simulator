@@ -52,6 +52,7 @@ export const useSavedDataManager = (): SavedDataManager => {
       try {
         savedDataLike = JSON.parse(rawJson);
       } catch (error) {
+        console.error(error);
         window.alert("セーブデータが壊れていました。");
         return defaultSavedData;
       }
