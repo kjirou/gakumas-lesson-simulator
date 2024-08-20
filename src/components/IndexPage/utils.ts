@@ -29,6 +29,8 @@ import {
   isProducerItemDataIdType,
 } from "gakumas-core";
 
+export const localStorageSavedDataKey = "GakumasLessonSimulator";
+
 export const idolParameterKindToText = (kind: IdolParameterKind): string => {
   switch (kind) {
     case "dance":

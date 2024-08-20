@@ -9,11 +9,10 @@ import {
   SettingInputValueSetters,
   defaultSavedData,
   forceInterpretObjectAsSavedData,
+  localStorageSavedDataKey,
 } from "./utils";
 
 type Props = React.ComponentProps<typeof IndexPageView>;
-
-const localStorageSavedDataKey = "GakumasLessonSimulator";
 
 /**
  * ゲームへ反映しているセーブデータとそれを操作する関数群を一式で返す
