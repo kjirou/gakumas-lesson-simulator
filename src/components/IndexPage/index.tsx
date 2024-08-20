@@ -1,5 +1,7 @@
 import React from "react";
 import type { HeadFC, PageProps } from "gatsby";
+import { IndexPageErrorBoundary } from "./IndexPageErrorBoundary";
+import { IndexPageFallback } from "./IndexPageFallback";
 import { IndexPageView } from "./View";
 import { usePageView, useSavedDataManager } from "./hooks";
 import { SavedDataManager } from "./utils";
@@ -19,10 +21,14 @@ const IndexPageOnSavedData: React.FC<{
 
 export const IndexPage: React.FC<PageProps> = () => {
   const savedDataManager = useSavedDataManager();
-  return savedDataManager.isLoading ? (
-    <div>Loading...</div>
-  ) : (
-    <IndexPageOnSavedData savedDataManager={savedDataManager} />
+  return (
+    <IndexPageErrorBoundary fallback={<IndexPageFallback />}>
+      {savedDataManager.isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <IndexPageOnSavedData savedDataManager={savedDataManager} />
+      )}
+    </IndexPageErrorBoundary>
   );
 };
 
