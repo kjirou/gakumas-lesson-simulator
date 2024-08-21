@@ -31,6 +31,11 @@ import {
 
 export const localStorageSavedDataKey = "GakumasLessonSimulator";
 
+/** 0を超える数なら "+" 付きの、0未満の数なら "-" 付きの、数値を表す文字列を返す */
+export const formatSignedNumber = (value: number): string => {
+  return value >= 0 ? `+${value}` : `${value}`;
+};
+
 export const idolParameterKindToText = (kind: IdolParameterKind): string => {
   switch (kind) {
     case "dance":
@@ -50,11 +55,11 @@ export const idolParameterKindToTextColorClassName = (
 ): string => {
   switch (kind) {
     case "dance":
-      return "text-blue-500";
+      return "text-gimDance";
     case "visual":
-      return "text-yellow-500";
+      return "text-gimVisual";
     case "vocal":
-      return "text-red-500";
+      return "text-gimVocal";
     default:
       const unreachable: never = kind;
       throw new Error("Unreachable statement");
@@ -76,7 +81,7 @@ export const actionCostKindToText = (kind: ActionCost["kind"]): string => {
     case "motivation":
       return "やる気";
     case "normal":
-      return "通常コスト";
+      return "コスト";
     case "positiveImpression":
       return "好印象";
     default:
@@ -131,68 +136,159 @@ export const producerItemPossessionKindToText = (
   }
 };
 
-export const cardEffectDisplayKindToText = (
+// NOTE: 通常は kind に対してアイコンがあれば良い。本実装では手間削減で文字列にするために構造体を返している。
+export const getCardEffectDisplayKindIcon = (
   kind: CardEffectDisplay["kind"],
-): string => {
+): { iconColorClassName: string; label: string } => {
   switch (kind) {
     case "drainLife":
-      return "体力減少";
+      return {
+        label: "体力減少",
+        iconColorClassName: "text-gimDebuff",
+      };
     case "drawCards":
-      return "ドロー";
+      return {
+        label: "ドロー",
+        iconColorClassName: "text-gimBuff",
+      };
     case "enhanceHand":
-      return "手札強化";
+      return {
+        label: "手札強化",
+        iconColorClassName: "text-gimBuff",
+      };
     case "exchangeHand":
-      return "手札交換";
+      return {
+        label: "手札交換",
+        iconColorClassName: "text-gimBuff",
+      };
     case "generateCard":
+      return {
+        label: "生成",
+        iconColorClassName: "text-gimDebuff",
+      };
     case "generateTroubleCard":
-      return "生成";
+      return {
+        label: "生成",
+        iconColorClassName: "text-gimBuff",
+      };
     case "increaseRemainingTurns":
-      return "ターン＋";
+      return {
+        label: "ターン＋",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-additionalCardUsageCount":
-      return "使用数＋";
+      return {
+        label: "使用数＋",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-debuffProtection":
-      return "低下無効";
+      return {
+        label: "低下無効",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-delayedEffect":
-      return "発動予約";
+      return {
+        label: "発動予約",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-doubleEffect":
-      return "追加発動";
+      return {
+        label: "追加発動",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-doubleLifeConsumption":
-      return "消費増加";
+      return {
+        label: "消費増加",
+        iconColorClassName: "text-gimDebuff",
+      };
     case "modifier-effectActivationBeforeCardEffectActivation":
     case "modifier-effectActivationOnTurnEnd":
-      return "持続効果";
+      return {
+        label: "持続効果",
+        iconColorClassName: "text-gimEffectactivationbuff",
+      };
     case "modifier-excellentCondition":
-      return "絶好調";
+      return {
+        label: "絶好調",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-focus":
-      return "集中";
+      return {
+        label: "集中",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-goodCondition":
-      return "好調";
+      return {
+        label: "好調",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-halfLifeConsumption":
-      return "消費減少";
+      return {
+        label: "消費減少",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-lifeConsumptionReduction":
-      return "消費削減";
+      return {
+        label: "消費削減",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-mightyPerformance":
-      return "スコア増加";
+      return {
+        label: "スコア増加",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-motivation":
-      return "やる気";
+      return {
+        label: "やる気",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-noVitalityIncrease":
-      return "元気無効";
+      return {
+        label: "元気無効",
+        iconColorClassName: "text-gimBuff",
+      };
     case "modifier-positiveImpression":
-      return "好印象";
+      return {
+        label: "好印象",
+        iconColorClassName: "text-gimBuff",
+      };
     case "multiplyModifier":
-      return "バフ乗算";
+      return {
+        label: "バフ乗算",
+        iconColorClassName: "text-gimBuff",
+      };
     case "perform-score":
-      return "スコア";
+      return {
+        label: "スコア＋",
+        iconColorClassName: "text-gimBuff",
+      };
     case "perform-vitality":
-      return "元気";
+      return {
+        label: "元気＋",
+        iconColorClassName: "text-gimBuff",
+      };
     case "performLeveragingModifier":
     case "performLeveragingVitality":
-      return "ボム";
+      return {
+        label: "ボム",
+        iconColorClassName: "text-gimBuff",
+      };
     case "recoverLife":
-      return "体力回復";
+      return {
+        label: "体力回復",
+        iconColorClassName: "text-gimBuff",
+      };
     default:
-      return "その他";
+      return {
+        label: "その他",
+        iconColorClassName: "text-gimBuff",
+      };
   }
+};
+
+export const getModifierDisplayKindIcon = (kind: ModifierDisplay["kind"]) => {
+  const cardEffectDisplayKind = `modifier-${kind}` as const;
+  return getCardEffectDisplayKindIcon(cardEffectDisplayKind);
 };
 
 export const createCharacterFullName = (

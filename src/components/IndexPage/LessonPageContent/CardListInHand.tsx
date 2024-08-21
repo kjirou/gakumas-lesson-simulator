@@ -1,9 +1,18 @@
-import { type CardInHandDisplay, LessonDisplay } from "gakumas-core";
+import {
+  CardInHandDisplay,
+  IdolParameterKind,
+  LessonDisplay,
+} from "gakumas-core";
 import React, { useCallback, useMemo } from "react";
-import { actionCostKindToText, cardEffectDisplayKindToText } from "../utils";
+import {
+  actionCostKindToText,
+  getCardEffectDisplayKindIcon,
+  idolParameterKindToTextColorClassName,
+} from "../utils";
 
 type CardInHandProps = {
   card: CardInHandDisplay;
+  idolParameterKind: IdolParameterKind;
   left: number;
   onClick: () => void;
   top: number;
@@ -11,6 +20,9 @@ type CardInHandProps = {
 };
 
 const CardInHand: React.FC<CardInHandProps> = (props) => {
+  const idolParameterKindClassName = idolParameterKindToTextColorClassName(
+    props.idolParameterKind,
+  );
   const style = useMemo(
     () => ({
       left: props.left,
@@ -33,35 +45,47 @@ const CardInHand: React.FC<CardInHandProps> = (props) => {
       onClick={onClick}
       style={style}
     >
-      <ul>
+      <ul className="text-xs flex flex-col">
         <li className="text-sm">{props.card.name}</li>
-        <li className="text-xs text-red-500">
+        <li className="text-red-500">
           {actionCostKindToText(props.card.cost.kind)}: -{props.card.cost.value}
         </li>
         {props.card.scores.length > 0 && (
-          <li className="text-xs">
-            スコア:{" "}
-            {props.card.scores
-              .map((score) => {
-                return (
-                  score.value + (score.times >= 2 ? `x${score.times}` : "")
-                );
-              })
-              .join(", ")}
+          <li className="flex gap-0.5">
+            <span>スコア:</span>
+            <span className={"font-bold " + idolParameterKindClassName}>
+              {props.card.scores
+                .map((score) => {
+                  return (
+                    score.value + (score.times >= 2 ? `×${score.times}` : "")
+                  );
+                })
+                .join(",")}
+            </span>
           </li>
         )}
         {props.card.vitality !== undefined && (
-          <li className="text-xs">元気: {props.card.vitality}</li>
+          <li className="flex gap-0.5">
+            <span>元気:</span>
+            <span className="font-bold text-gimVitality">
+              {props.card.vitality}
+            </span>
+          </li>
         )}
         {props.card.effects.length > 0 && (
-          <li className="text-xs">
+          <li>
             {props.card.effects.map((effect, index) => {
-              const className = effect.activatable
-                ? "text-emerald-500"
-                : "text-red-500";
+              const { label, iconColorClassName } =
+                getCardEffectDisplayKindIcon(effect.kind);
               return (
-                <span key={index} className={className}>
-                  ({cardEffectDisplayKindToText(effect.kind)})
+                <span
+                  key={index}
+                  className={
+                    iconColorClassName +
+                    (effect.activatable ? "" : " line-through")
+                  }
+                >
+                  [{label}]
                 </span>
               );
             })}
@@ -103,6 +127,7 @@ export const calculateCardInHandLeft = (
 
 export const CardListInHand: React.FC<{
   hand: LessonDisplay["hand"];
+  idolParameterKind: IdolParameterKind;
   onClick: (cardIndex: number) => void;
   selectedCardIndex: number | undefined;
 }> = (props) => {
@@ -129,9 +154,15 @@ export const CardListInHand: React.FC<{
     });
   }, [props.hand, props.onClick]);
   return (
-    <div className="h-[160px] relative bg-slate-100">
+    <div className="h-[160px] relative">
       {cardList.map((item, index) => {
-        return <CardInHand key={index} {...item} />;
+        return (
+          <CardInHand
+            key={index}
+            idolParameterKind={props.idolParameterKind}
+            {...item}
+          />
+        );
       })}
     </div>
   );
