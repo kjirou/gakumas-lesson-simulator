@@ -82,6 +82,8 @@ const LessonPageContentRaw: React.FC<Props> = (props) => {
         throw new Error("Unreachable statement");
     }
   }, [lesson.turnNumber, nextPhase]);
+  // TODO: lessonDisplay から取得する
+  const idolParameterKind = getIdolParameterKindOnTurn(lesson);
   const isActionEnabled = nextPhase === "playerInput";
   const turnInformation: TurnInformationProps = lessonDisplay.currentTurn;
   const producerItemList: ProducerItemListProps = {
@@ -89,7 +91,7 @@ const LessonPageContentRaw: React.FC<Props> = (props) => {
   };
   let scoreInformation: ScoreInformationProps = {
     score: lessonDisplay.score,
-    idolParameterKind: getIdolParameterKindOnTurn(lesson),
+    idolParameterKind,
     scoreBonus: lessonDisplay.scoreBonus,
   };
   let idolInformation: IdolInformationProps = {
@@ -168,6 +170,7 @@ const LessonPageContentRaw: React.FC<Props> = (props) => {
   };
   const cardListInHand: CardListInHandProps = {
     hand: lessonDisplay.hand,
+    idolParameterKind,
     selectedCardIndex,
     onClick: onClickCardInHand,
   };
