@@ -36,6 +36,7 @@ const parseDndId = (dndId: ReturnType<typeof createDndId>): number => {
 };
 
 const CardListItemRaw: React.FC<{
+  canBeEnhanced: boolean;
   cardName: string;
   onClickCardCopyButton: (index: number) => void;
   onClickCardEnhanceButton: (index: number) => void;
@@ -88,7 +89,11 @@ const CardListItemRaw: React.FC<{
       </div>
       <div className="w-4/12 flex gap-0.5">
         <Button
-          className="border select-none"
+          className={
+            "border select-none" +
+            (props.canBeEnhanced ? "" : " text-slate-300")
+          }
+          disabled={!props.canBeEnhanced}
           onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation();
             props.onClickCardEnhanceButton(props.listItemIndex);
@@ -248,7 +253,8 @@ const CardManagerRaw: React.FC<Props> = (props) => {
   const handeClickCardEnhanceButton = useCallback((index: number) => {
     props.setCardsInputValue((cardsState) => {
       return cardsState.map((card, i) => {
-        if (i === index) {
+        const cardData = getCardDataById(card.id);
+        if (i === index && cardData.contents.length > 1) {
           return {
             ...card,
             enhanced: !card.enhanced,
@@ -385,12 +391,13 @@ const CardManagerRaw: React.FC<Props> = (props) => {
         <DndContext onDragEnd={handleDragEnd}>
           <ul>
             {props.cardsInputValue.map((cardInputValue, index) => {
-              const card = getCardDataById(cardInputValue.id);
+              const cardData = getCardDataById(cardInputValue.id);
               // TODO: card生成もname生成もcore側のメソッドを使う、コア側のメソッドを調整してから
-              const name = card.name + (cardInputValue.enhanced ? "+" : "");
+              const name = cardData.name + (cardInputValue.enhanced ? "+" : "");
               return (
                 <CardListItem
                   key={index}
+                  canBeEnhanced={cardData.contents.length > 1}
                   cardName={name}
                   listItemIndex={index}
                   onClickCardCopyButton={handeClickCardCopyButton}
