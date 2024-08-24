@@ -153,11 +153,16 @@ const CardManagerRaw: React.FC<Props> = (props) => {
             card.cardPossessionKind === idolData.producePlan.kind;
           const doesExcludeIdolSpecificCondition =
             !doesExcludeIdolSpecific || card.cardProviderKind !== "idol";
+          const normalizedQuery = query.toLowerCase();
+          const searchedTexts = [
+            card.id,
+            card.name,
+            ...(card.keywords ?? []),
+          ].map((text) => text.toLowerCase());
           return (
             isProducePlanMatchedCondition &&
             doesExcludeIdolSpecificCondition &&
-            (card.id.toLowerCase().includes(query.toLowerCase()) ||
-              card.name.toLowerCase().includes(query.toLowerCase()))
+            searchedTexts.some((text) => text.includes(normalizedQuery))
           );
         });
   }, [

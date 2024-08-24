@@ -48,11 +48,16 @@ const ProducerItemManagerRaw: React.FC<Props> = (props) => {
           const doesExcludeIdolSpecificCondition =
             !doesExcludeIdolSpecific ||
             producerItem.producerItemProviderKind !== "idol";
+          const normalizedQuery = query.toLowerCase();
+          const searchedTexts = [
+            producerItem.id,
+            producerItem.name,
+            ...(producerItem.keywords ?? []),
+          ].map((text) => text.toLowerCase());
           return (
             isProducePlanMatchedCondition &&
             doesExcludeIdolSpecificCondition &&
-            (producerItem.id.toLowerCase().includes(query.toLowerCase()) ||
-              producerItem.name.toLowerCase().includes(query.toLowerCase()))
+            searchedTexts.some((text) => text.includes(normalizedQuery))
           );
         });
   }, [

@@ -18,12 +18,8 @@ const CardDescriptionDialogRaw: React.FC<{
   enhanced: boolean;
   onClickBackdrop: Parameters<typeof DescriptionDialog>[0]["onClickBackdrop"];
 }> = (props) => {
-  const card: Card = {
-    id: "",
-    data: props.data,
-    enhancements: props.enhanced ? [{ kind: "original" }] : [],
-  };
-  const cardContent = getCardContentData(card);
+  const enhancementCount = props.enhanced ? 1 : 0;
+  const cardContent = getCardContentData(props.data, enhancementCount);
   const description = generateCardDescription({
     cost: cardContent.cost,
     condition: cardContent.condition,
@@ -35,7 +31,7 @@ const CardDescriptionDialogRaw: React.FC<{
   return (
     <DescriptionDialog onClickBackdrop={props.onClickBackdrop}>
       <ul className="flex flex-col">
-        <li>{generateCardName(card)}</li>
+        <li>{generateCardName(props.data.name, enhancementCount)}</li>
         <li>
           <span>{cardPossessionKindToText(props.data.cardPossessionKind)}</span>
           <span className="pl-1 pr-1">/</span>

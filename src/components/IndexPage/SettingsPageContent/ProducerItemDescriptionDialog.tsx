@@ -14,13 +14,10 @@ const ProducerItemDescriptionDialogRaw: React.FC<{
   enhanced: boolean;
   onClickBackdrop: Parameters<typeof DescriptionDialog>[0]["onClickBackdrop"];
 }> = (props) => {
-  const producerItem: ProducerItem = {
-    id: "",
-    data: props.data,
-    enhanced: props.enhanced,
-    activationCount: 0,
-  };
-  const producerItemContent = getProducerItemContentData(producerItem);
+  const producerItemContent = getProducerItemContentData(
+    props.data,
+    props.enhanced,
+  );
   const description = generateProducerItemDescription({
     condition: producerItemContent.condition,
     cost: producerItemContent.cost,
@@ -31,7 +28,7 @@ const ProducerItemDescriptionDialogRaw: React.FC<{
   return (
     <DescriptionDialog onClickBackdrop={props.onClickBackdrop}>
       <ul className="flex flex-col">
-        <li>{generateProducerItemName(producerItem)}</li>
+        <li>{generateProducerItemName(props.data.name, props.enhanced)}</li>
         <li>
           <span>
             {producerItemPossessionKindToText(
