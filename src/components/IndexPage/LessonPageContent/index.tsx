@@ -5,7 +5,6 @@ import {
   endTurn,
   generateCardPlayPreviewDisplay,
   generateLessonDisplay,
-  getIdolParameterKindOnTurn,
   getLesson,
   getNextPhase,
   initializeGamePlay,
@@ -82,8 +81,7 @@ const LessonPageContentRaw: React.FC<Props> = (props) => {
         throw new Error("Unreachable statement");
     }
   }, [lesson.turnNumber, nextPhase]);
-  // TODO: lessonDisplay から取得する
-  const idolParameterKind = getIdolParameterKindOnTurn(lesson);
+  const idolParameterKind = lessonDisplay.currentTurn.idolParameterKind;
   const isActionEnabled = nextPhase === "playerInput";
   const turnInformation: TurnInformationProps = lessonDisplay.currentTurn;
   const producerItemList: ProducerItemListProps = {
