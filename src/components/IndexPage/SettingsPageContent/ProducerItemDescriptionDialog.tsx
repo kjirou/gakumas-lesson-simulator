@@ -6,7 +6,7 @@ import {
   getProducerItemContentData,
 } from "gakumas-core";
 import React from "react";
-import { producerItemPossessionKindToText } from "../utils";
+import { producerItemPossessionKindToText, rarityToText } from "../utils";
 import { DescriptionDialog } from "../DescriptionDialog";
 
 const ProducerItemDescriptionDialogRaw: React.FC<{
@@ -30,6 +30,8 @@ const ProducerItemDescriptionDialogRaw: React.FC<{
       <ul className="flex flex-col">
         <li>{generateProducerItemName(props.data.name, props.enhanced)}</li>
         <li>
+          <span>{rarityToText(props.data.rarity)}</span>
+          <span className="pl-1 pr-1">/</span>
           <span>
             {producerItemPossessionKindToText(
               props.data.producerItemPossessionKind,

@@ -10,6 +10,7 @@ import {
   actionCostKindToText,
   cardPossessionKindToText,
   cardSummaryKindToText,
+  rarityToText,
 } from "../utils";
 import { DescriptionDialog } from "../DescriptionDialog";
 
@@ -33,6 +34,8 @@ const CardDescriptionDialogRaw: React.FC<{
       <ul className="flex flex-col">
         <li>{generateCardName(props.data.name, enhancementCount)}</li>
         <li>
+          <span>{rarityToText(props.data.rarity)}</span>
+          <span className="pl-1 pr-1">/</span>
           <span>{cardPossessionKindToText(props.data.cardPossessionKind)}</span>
           <span className="pl-1 pr-1">/</span>
           <span>{cardSummaryKindToText(props.data.cardSummaryKind)}</span>

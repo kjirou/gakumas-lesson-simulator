@@ -24,6 +24,7 @@ import {
   SettingInputValues,
   SettingInputValueSetters,
   canCardBeEnhancedWithSpecialTrainingLevel,
+  filterCardsDataToNonDuplicativeOnly,
 } from "../utils";
 import { CardDescriptionDialog } from "./CardDescriptionDialog";
 
@@ -204,6 +205,17 @@ const CardManagerRaw: React.FC<Props> = (props) => {
       return [...cardsState, ...newCards];
     });
   }, []);
+  const handleClickNonDuplicativeCardSetAdditionButton = useCallback(() => {
+    const idolData = getIdolDataByConstId(props.idolDataIdInputValue);
+    const cardsData = filterCardsDataToNonDuplicativeOnly(idolData.producePlan);
+    const newCards = cardsData.map((cardData) => ({
+      id: cardData.id as CardDataId,
+      enhanced: true,
+    }));
+    props.setCardsInputValue((cardsState) => {
+      return [...cardsState, ...newCards];
+    });
+  }, [props.idolDataIdInputValue]);
   const handleClickClearingCardsButton = useCallback(() => {
     props.setCardsInputValue([]);
   }, []);
@@ -281,8 +293,8 @@ const CardManagerRaw: React.FC<Props> = (props) => {
   }, []);
   return (
     <>
-      <div className="mt-1 flex flex-col gap-1">
-        <ul className="flex items-center gap-1 text-sm">
+      <div className="flex flex-col gap-1">
+        <ul className="mt-1 flex items-center gap-1 text-sm">
           <li>
             <Button onClick={handleClickIdolSpecificCardAdditionButton}>
               固有追加
@@ -290,7 +302,12 @@ const CardManagerRaw: React.FC<Props> = (props) => {
           </li>
           <li>
             <Button onClick={handleClickDefaultCardSetAdditionButton}>
-              初期セット追加
+              初期追加
+            </Button>
+          </li>
+          <li>
+            <Button onClick={handleClickNonDuplicativeCardSetAdditionButton}>
+              全重複不可追加
             </Button>
           </li>
           <li>
