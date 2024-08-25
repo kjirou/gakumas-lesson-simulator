@@ -1,4 +1,3 @@
-import { Button } from "@headlessui/react";
 import {
   GamePlay,
   LessonDisplay,
@@ -25,6 +24,7 @@ import { ProducerItemList } from "./ProducerItemList";
 import { ScoreInformation } from "./ScoreInformation";
 import { SkipButton } from "./SkipButton";
 import { TurnInformation } from "./TurnInformation";
+import { Button } from "../Button";
 import { InitializeGamePlayParams, createCharacterFullName } from "../utils";
 
 type ActionEndOrNotPreviewProps = React.ComponentProps<
@@ -193,7 +193,7 @@ const LessonPageContentRaw: React.FC<Props> = (props) => {
     <PageContent onClick={onClickLessonPageContent}>
       <div className="h-[40px] flex">
         <Button
-          className="p-2 text-xs border"
+          additionalClassName="p-2 text-sm"
           onClick={onClickRestartLessonButton}
         >
           リスタート

@@ -1,5 +1,4 @@
 import {
-  Button,
   Combobox,
   ComboboxInput,
   ComboboxOption,
@@ -13,6 +12,7 @@ import {
   ProducerItemData,
 } from "gakumas-core";
 import React, { useCallback, useMemo, useState } from "react";
+import { Button } from "../Button";
 import {
   SettingInputValues,
   SettingInputValueSetters,
@@ -151,15 +151,14 @@ const ProducerItemManagerRaw: React.FC<Props> = (props) => {
       <div className="mt-1 flex flex-col gap-1">
         <ul className="flex items-center gap-1 text-sm">
           <li>
-            <Button
-              className="border select-none"
-              onClick={handleClickIdolSpecificProducerItemAdditionButton}
-            >
+            <Button onClick={handleClickIdolSpecificProducerItemAdditionButton}>
               固有追加
             </Button>
           </li>
-          <li onClick={handleClickClearingProducerItemsButton}>
-            <Button className="border select-none">クリア</Button>
+          <li>
+            <Button onClick={handleClickClearingProducerItemsButton}>
+              クリア
+            </Button>
           </li>
         </ul>
         <ul className="flex items-center gap-0.5">
@@ -238,7 +237,7 @@ const ProducerItemManagerRaw: React.FC<Props> = (props) => {
                 (producerItemInputValue.enhanced ? "+" : "");
               const canBeEnhanced = producerItemData.enhanced;
               return (
-                <li key={index} className="text-xs flex items-center border">
+                <li key={index} className="flex items-center border text-xs">
                   <div className="w-1/12">{index + 1}</div>
                   <div
                     className="flex-1 cursor-pointer"
@@ -250,9 +249,8 @@ const ProducerItemManagerRaw: React.FC<Props> = (props) => {
                   </div>
                   <div className="w-4/12 flex gap-0.5">
                     <Button
-                      className={
-                        "border select-none " +
-                        (canBeEnhanced ? "" : "text-slate-300")
+                      additionalClassName={
+                        canBeEnhanced ? "" : "text-slate-300"
                       }
                       disabled={!canBeEnhanced}
                       onClick={() => {
@@ -262,7 +260,6 @@ const ProducerItemManagerRaw: React.FC<Props> = (props) => {
                       強化
                     </Button>
                     <Button
-                      className="border select-none"
                       onClick={() => {
                         handeClickProducerItemRemovalButton(index);
                       }}

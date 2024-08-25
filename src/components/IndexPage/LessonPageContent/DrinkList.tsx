@@ -1,7 +1,7 @@
-import { Button, Select } from "@headlessui/react";
+import { Select } from "@headlessui/react";
 import { DrinkDisplay } from "gakumas-core";
 import React, { useCallback, useState } from "react";
-import {} from "../utils";
+import { Button } from "../Button";
 import { DescriptionDialog } from "../DescriptionDialog";
 
 const DrinkDescriptionDialogRaw: React.FC<{
@@ -69,18 +69,8 @@ const DrinkListRaw: React.FC<Props> = (props) => {
             );
           })}
         </Select>
-        <Button
-          className="border select-none"
-          onClick={handleClickDrinkDescriptionButton}
-        >
-          説明
-        </Button>
-        <Button
-          className="border select-none"
-          onClick={props.onClickDrinkUsageButton}
-        >
-          使用
-        </Button>
+        <Button onClick={handleClickDrinkDescriptionButton}>説明</Button>
+        <Button onClick={props.onClickDrinkUsageButton}>使用</Button>
       </div>
       {shownDrinkDescriptionDialog && (
         <DrinkDescriptionDialog {...shownDrinkDescriptionDialog} />
