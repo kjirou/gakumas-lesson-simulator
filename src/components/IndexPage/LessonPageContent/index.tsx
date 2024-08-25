@@ -11,12 +11,14 @@ import {
   playCard,
   skipTurn,
   startTurn,
+  useDrink,
 } from "gakumas-core";
 import React, { useCallback, useEffect, useState } from "react";
 import { PageContent } from "../PageContent";
 import { ActionEndOrNotPreview } from "./ActionEndOrNotPreview";
 import { CardListInHand } from "./CardListInHand";
 import { CardPlayPreview } from "./CardPlayPreview";
+import { DrinkList } from "./DrinkList";
 import { IdolInformation } from "./IdolInformation";
 import { ModifierList } from "./ModifierList";
 import { ProducerItemList } from "./ProducerItemList";
@@ -30,6 +32,7 @@ type ActionEndOrNotPreviewProps = React.ComponentProps<
 >;
 type CardListInHandProps = React.ComponentProps<typeof CardListInHand>;
 type CardPlayPreviewProps = React.ComponentProps<typeof CardPlayPreview>;
+type DrinkListProps = React.ComponentProps<typeof DrinkList>;
 type IdolInformationProps = React.ComponentProps<typeof IdolInformation>;
 type ModifierListProps = React.ComponentProps<typeof ModifierList>;
 type ProducerItemListProps = React.ComponentProps<typeof ProducerItemList>;
@@ -53,6 +56,7 @@ const LessonPageContentRaw: React.FC<Props> = (props) => {
   const [selectedCardIndex, setSelectedCardIndex] = useState<
     number | undefined
   >();
+  const [selectedDrinkIndex, setSelectedDrinkIndex] = useState(0);
   const nextPhase = getNextPhase(gamePlay);
   const lesson = getLesson(gamePlay);
   useEffect(() => {
@@ -86,6 +90,19 @@ const LessonPageContentRaw: React.FC<Props> = (props) => {
   const turnInformation: TurnInformationProps = lessonDisplay.currentTurn;
   const producerItemList: ProducerItemListProps = {
     producerItems: lessonDisplay.producerItems,
+  };
+  const onClickDrinkUsageButton = useCallback(() => {
+    const newGamePlay = useDrink(gamePlay, selectedDrinkIndex, {
+      noConsumption: true,
+    });
+    setGamePlay(newGamePlay);
+    setLessonDisplay(generateLessonDisplay(newGamePlay));
+  }, [gamePlay, selectedDrinkIndex]);
+  const drinkList: DrinkListProps = {
+    drinks: lessonDisplay.drinks,
+    onClickDrinkUsageButton,
+    selectedDrinkIndex,
+    setSelectedDrinkIndex,
   };
   let scoreInformation: ScoreInformationProps = {
     score: lessonDisplay.score,
@@ -202,7 +219,9 @@ const LessonPageContentRaw: React.FC<Props> = (props) => {
         </div>
       </div>
       <CardListInHand {...cardListInHand} />
-      <div className="h-[80px]"></div>
+      <div className="h-[80px] flex justify-start items-center">
+        <DrinkList {...drinkList} />
+      </div>
       {actionEndOrNotPreview && (
         <div className="absolute top-[412px] left-[4px] z-5">
           <ActionEndOrNotPreview {...actionEndOrNotPreview} />
