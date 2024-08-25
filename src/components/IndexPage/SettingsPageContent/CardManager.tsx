@@ -293,8 +293,8 @@ const CardManagerRaw: React.FC<Props> = (props) => {
   }, []);
   return (
     <>
-      <div className="mt-1 flex flex-col gap-1">
-        <ul className="flex items-center gap-1 text-sm">
+      <div className="flex flex-col gap-1">
+        <ul className="mt-1 flex items-center gap-1 text-sm">
           <li>
             <Button onClick={handleClickIdolSpecificCardAdditionButton}>
               固有追加
