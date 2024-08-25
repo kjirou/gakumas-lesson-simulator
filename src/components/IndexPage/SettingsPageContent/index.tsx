@@ -161,7 +161,26 @@ const SettingsPageContentRaw: React.FC<Props> = (props) => {
                 >
                   GitHub
                 </a>
-                <span>のIssuesへお願いします</span>
+                <span>のIssuesへお願いします。</span>
+              </li>
+              <li>
+                更新履歴は
+                <a
+                  href="https://github.com/kjirou/gakumas-lesson-simulator/commits/main/"
+                  className="underline text-blue-500"
+                  target="_blank"
+                >
+                  ココ
+                </a>
+                か
+                <a
+                  href="https://github.com/kjirou/gakumas-core/commits/main/"
+                  className="underline text-blue-500"
+                  target="_blank"
+                >
+                  ココ
+                </a>
+                を見るとわかるカモ...
               </li>
               <li>学マスレッスンシミュレーター（β）</li>
             </ul>
