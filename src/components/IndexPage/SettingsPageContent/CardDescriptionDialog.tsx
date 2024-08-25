@@ -11,7 +11,7 @@ import {
   cardPossessionKindToText,
   cardSummaryKindToText,
 } from "../utils";
-import { DescriptionDialog } from "./DescriptionDialog";
+import { DescriptionDialog } from "../DescriptionDialog";
 
 const CardDescriptionDialogRaw: React.FC<{
   data: CardData;

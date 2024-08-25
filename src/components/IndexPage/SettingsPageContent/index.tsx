@@ -90,7 +90,6 @@ const SettingsPageContentRaw: React.FC<Props> = (props) => {
           <TabOnPageContent>ターン</TabOnPageContent>
           <TabOnPageContent>カード</TabOnPageContent>
           <TabOnPageContent>Pアイ</TabOnPageContent>
-          <TabOnPageContent>Pドリ</TabOnPageContent>
         </TabList>
         <TabPanels>
           <TabPanelOnPageContent>
@@ -175,9 +174,6 @@ const SettingsPageContentRaw: React.FC<Props> = (props) => {
           </TabPanelOnPageContent>
           <TabPanelOnPageContent>
             <ProducerItemManager {...props.producerItemManager} />
-          </TabPanelOnPageContent>
-          <TabPanelOnPageContent>
-            Pドリンク検索＆追加＆削除
           </TabPanelOnPageContent>
         </TabPanels>
       </TabGroup>

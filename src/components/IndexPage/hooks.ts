@@ -1,4 +1,4 @@
-import {} from "gakumas-core";
+import { DrinkDataId, drinks } from "gakumas-core";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IndexPageView } from "./View";
 import {
@@ -76,6 +76,11 @@ const useGamePlaySettings = (
   inputValues: SettingInputValues,
 ): InitializeGamePlayParams => {
   return useMemo(() => {
+    const drinks_ = drinks.map((drinkData) => {
+      return {
+        id: drinkData.id as DrinkDataId,
+      };
+    });
     const scoreBonus = inputValues.isScoreBonusEnabledInputValue
       ? {
           vocal: Number(inputValues.scoreBonusInputValueSet.vocal),
@@ -101,6 +106,7 @@ const useGamePlaySettings = (
     return {
       cards: inputValues.cardsInputValue,
       clearScoreThresholds,
+      drinks: drinks_,
       idolDataId: inputValues.idolDataIdInputValue,
       life:
         inputValues.lifeInputValue !== ""
