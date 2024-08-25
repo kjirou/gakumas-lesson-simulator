@@ -5,7 +5,6 @@ import {
   useDroppable,
 } from "@dnd-kit/core";
 import {
-  Button,
   Combobox,
   ComboboxInput,
   ComboboxOption,
@@ -20,6 +19,7 @@ import {
   getIdolDataByConstId,
 } from "gakumas-core";
 import React, { useCallback, useMemo, useState } from "react";
+import { Button } from "../Button";
 import {
   SettingInputValues,
   SettingInputValueSetters,
@@ -66,7 +66,7 @@ const CardListItemRaw: React.FC<{
       key={props.listItemIndex}
       ref={setNodeRefDroppable}
       className={
-        "text-xs flex items-center border" + (isOver ? " bg-yellow-100" : "")
+        "flex items-center border text-xs" + (isOver ? " bg-yellow-100" : "")
       }
     >
       <div
@@ -89,10 +89,7 @@ const CardListItemRaw: React.FC<{
       </div>
       <div className="w-4/12 flex gap-0.5">
         <Button
-          className={
-            "border select-none" +
-            (props.canBeEnhanced ? "" : " text-slate-300")
-          }
+          additionalClassName={props.canBeEnhanced ? "" : "text-slate-300"}
           disabled={!props.canBeEnhanced}
           onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation();
@@ -102,7 +99,6 @@ const CardListItemRaw: React.FC<{
           強化
         </Button>
         <Button
-          className="border select-none"
           onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation();
             props.onClickCardCopyButton(props.listItemIndex);
@@ -111,7 +107,6 @@ const CardListItemRaw: React.FC<{
           複製
         </Button>
         <Button
-          className="border select-none"
           onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation();
             props.onClickCardRemovalButton(props.listItemIndex);
@@ -289,23 +284,17 @@ const CardManagerRaw: React.FC<Props> = (props) => {
       <div className="mt-1 flex flex-col gap-1">
         <ul className="flex items-center gap-1 text-sm">
           <li>
-            <Button
-              className="border"
-              onClick={handleClickIdolSpecificCardAdditionButton}
-            >
+            <Button onClick={handleClickIdolSpecificCardAdditionButton}>
               固有追加
             </Button>
           </li>
           <li>
-            <Button
-              className="border"
-              onClick={handleClickDefaultCardSetAdditionButton}
-            >
+            <Button onClick={handleClickDefaultCardSetAdditionButton}>
               初期セット追加
             </Button>
           </li>
-          <li onClick={handleClickClearingCardsButton}>
-            <Button className="border">クリア</Button>
+          <li>
+            <Button onClick={handleClickClearingCardsButton}>クリア</Button>
           </li>
         </ul>
         <ul className="flex items-center gap-0.5">

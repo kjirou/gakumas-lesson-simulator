@@ -1,5 +1,5 @@
-import { Button } from "@headlessui/react";
 import React from "react";
+import { Button } from "../Button";
 import { SavedDataManager } from "../utils";
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 const ResetSettingsButtonRaw: React.FC<Props> = (props) => {
   return (
     <Button
-      className="w-[48px] text-sm border"
+      additionalClassName="w-[48px] text-sm"
       onClick={() => {
         props.clearSavedData();
       }}
