@@ -68,7 +68,7 @@ export const idolParameterKindToTextColorClassName = (
   }
 };
 
-const rarityToText = (kind: "c" | "r" | "sr" | "ssr"): string => {
+export const rarityToText = (kind: "c" | "r" | "sr" | "ssr"): string => {
   return kind.toUpperCase();
 };
 
