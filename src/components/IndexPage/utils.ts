@@ -16,7 +16,9 @@ import {
   IdolParameterKind,
   Lesson,
   ModifierDisplay,
+  ProducePlan,
   ProducerItemData,
+  cards,
   getCharacterDataById,
   getIdolParameterKindOnTurn,
   getLesson,
@@ -512,3 +514,19 @@ export const canCardBeEnhancedWithSpecialTrainingLevel = (
 export const canProducerItemBeEnhancedWithTalentAwakeningLevel = (
   inputValue: SettingInputValues["talentAwakeningLevelInputValue"],
 ) => Number(inputValue) >= 2;
+
+/**
+ * スキルカードデータリストから、プロデュース中に取得可能な重複不可のものだけを抽出する
+ */
+export const filterCardsDataToNonDuplicativeOnly = (
+  producePlan: ProducePlan,
+) => {
+  return cards.filter((cardData) => {
+    return (
+      cardData.nonDuplicative &&
+      cardData.cardProviderKind === "others" &&
+      (cardData.cardPossessionKind === "free" ||
+        cardData.cardPossessionKind === producePlan.kind)
+    );
+  });
+};
