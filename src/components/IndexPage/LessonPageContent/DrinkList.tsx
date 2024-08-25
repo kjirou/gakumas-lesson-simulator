@@ -2,7 +2,7 @@ import { Button, Select } from "@headlessui/react";
 import { DrinkDisplay } from "gakumas-core";
 import React, { useCallback, useState } from "react";
 import {} from "../utils";
-import { DescriptionDialog } from "./DescriptionDialog";
+import { DescriptionDialog } from "../DescriptionDialog";
 
 const DrinkDescriptionDialogRaw: React.FC<{
   drink: DrinkDisplay;

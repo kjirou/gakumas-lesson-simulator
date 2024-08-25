@@ -7,7 +7,7 @@ import {
 } from "gakumas-core";
 import React from "react";
 import { producerItemPossessionKindToText } from "../utils";
-import { DescriptionDialog } from "./DescriptionDialog";
+import { DescriptionDialog } from "../DescriptionDialog";
 
 const ProducerItemDescriptionDialogRaw: React.FC<{
   data: ProducerItemData;
