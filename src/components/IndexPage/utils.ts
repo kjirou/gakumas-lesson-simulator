@@ -8,26 +8,18 @@ import {
   CardEffectDisplay,
   CardSummaryKind,
   CharacterData,
-  CharacterDataId,
-  GamePlay,
-  Idol,
   IdolData,
   IdolDataId,
   IdolParameterKind,
-  Lesson,
   ModifierDisplay,
   ProducePlan,
   ProducerItemData,
   cards,
   getCharacterDataById,
-  getIdolParameterKindOnTurn,
-  getLesson,
-  hasActionEnded,
   idols,
   initializeGamePlay,
   isCardDataIdType,
   isIdolDataIdType,
-  isLessonEnded,
   isProducerItemDataIdType,
 } from "gakumas-core";
 
@@ -203,8 +195,7 @@ export const getCardEffectDisplayKindIcon = (
         label: "消費増加",
         iconColorClassName: "text-gimDebuff",
       };
-    case "modifier-effectActivationBeforeCardEffectActivation":
-    case "modifier-effectActivationOnTurnEnd":
+    case "modifier-reactiveEffect":
       return {
         label: "持続効果",
         iconColorClassName: "text-gimEffectactivationbuff",
