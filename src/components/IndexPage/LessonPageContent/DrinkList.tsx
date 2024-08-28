@@ -3,6 +3,7 @@ import { DrinkDisplay } from "gakumas-core";
 import React, { useCallback, useState } from "react";
 import { Button } from "../Button";
 import { DescriptionDialog } from "../DescriptionDialog";
+import { rarityToText } from "../utils";
 
 const DrinkDescriptionDialogRaw: React.FC<{
   drink: DrinkDisplay;
@@ -12,6 +13,7 @@ const DrinkDescriptionDialogRaw: React.FC<{
     <DescriptionDialog onClickBackdrop={props.onClickBackdrop}>
       <ul className="flex flex-col">
         <li>{props.drink.name}</li>
+        <li>{<span>{rarityToText(props.drink.data.rarity)}</span>}</li>
       </ul>
       <hr />
       <div>
